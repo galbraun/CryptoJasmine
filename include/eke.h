@@ -1,16 +1,15 @@
-// The biggest 64bit prime
 #ifndef	EKE_H
 #define	EKE_H
 
+// The biggest 64bit prime
 #define P 0xffffffffffffffc5ull
 #define G 5
 
 #include <stdio.h>
 #include <stdint.h>
-#include <assert.h>
+//#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <inttypes.h>
 #include "md5.h"
 #include "aes.h"
 
@@ -28,6 +27,6 @@ uint64_t randomint64();
 
 uint32_t randomint32();
 
-void printBits(uint64_t num);
+//void printBits(uint64_t num);
 
 #endif //EKE_H

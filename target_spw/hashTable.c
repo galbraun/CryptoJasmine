@@ -1,5 +1,41 @@
 #include "hashTable.h"
 
+int hashingHashTable(HashTable* hashTable,char* key){
+	int h = 0;
+	char *p;
+	for (p=key; *p; p++){
+		h = (hashTable->T[h])^ *p; /* Xor */
+	}
+	return h;
+}
+
+
+void swapIfDiff(int* a, int* b) {
+    if (a != b) {
+		int tmp = *a;
+        *a = *b;
+		*b = tmp;
+    }
+}
+
+
+int* randomAsciiArray(){
+	int* T = malloc(sizeof(int)*256);
+
+    for (int i = 0; i < 256; i++){
+        T[i] = i;
+	}
+
+    srand(time(NULL));
+
+    for (int i = 0; i < 256; i++){
+        swapIfDiff(&T[i], &T[rand() % 256]);
+	}
+
+    return T;
+}
+
+
 HashTable* createHashTable(){
 	HashTable* newHashTable = malloc(sizeof(HashTable));
 	if (newHashTable==NULL){
@@ -15,10 +51,10 @@ HashTable* createHashTable(){
 	}
 	
 	for (int i = 0; i < newHashTable->currentSize ; i++){
-		table[i] = createStringList();
+		newHashTable->table[i] = createStringList();
 	}
 	
-	newHashTable=randomAsciiArray();
+	newHashTable->T=randomAsciiArray();
 	
 	return newHashTable;
 }
@@ -53,43 +89,8 @@ bool enlargeTable(HashTable* hashTable){
 
 // TODO: build reduce ?
 
-static void hashingHashTable(HashTable* hashTable,const int key){
-	int h = 0;
-	char *p;
-	for (p=s; *p; p++){
-		h = (hashTable->T[h])^ *p; /* Xor */
-	}
-	return h;
-}
-
-
-static void swapIfDiff(int* a, int* b) {
-    if (a != b) {
-		int tmp = *a;
-        *a = *b;
-		*b = *tmp
-    }
-}
-
-int* randomAsciiArray(void){
-	int* T = malloc(sizeof(int)*256)
-
-    for (int i = 0; i < 256; i++){
-        T[i] = i;
-	}
-
-    srand(time(NULL));
-
-    for (int i = 0; i < 256; i++){
-        swapIfDiff(&T[i], &T[rand() % 256]);
-	}
-
-    return T;
-}
-
-
 char** findInHashTable(HashTable* hashTable,char* key){
-	StringList* currentList = hashTable->table[hashingHashTable(key)];
+	StringList* currentList = hashTable->table[hashingHashTable(hashTable,key)];
 	int index = findIndexInStringList(currentList,key);
 	if (index == -1 ){
 		return NULL;
@@ -99,7 +100,7 @@ char** findInHashTable(HashTable* hashTable,char* key){
 
 
 void insertToHashTable(HashTable* hashTable,char* key,char* value){
-	StringList* currentList = table[hashingHashTable(key)];
+	StringList* currentList = hashTable->table[hashingHashTable(hashTable,key)];
 //	bool isEmpty = currentList.isEmpty();
 	appendToStringList(currentList,key,value);
 //	if (isEmpty){
@@ -108,15 +109,10 @@ void insertToHashTable(HashTable* hashTable,char* key,char* value){
 }
 
 void removeFromHashTable(HashTable* hashTable,char* key){
-	StringList* currentList = table[hashingHashTable(key)];
-	for (typename List<T>::Iterator it = currentList->begin(); !(it.isNull()); it++){
-		if ((*it) == key){
-			currentList.remove((*it));
-			if (currentList.isEmpty()){
-				numOfFullCells--;
-			}
-		}
+	StringList* currentList = hashTable->table[hashingHashTable(hashTable,key)];
+	int index = findIndexInStringList(currentList,key);
+	if (index != -1){
+		removeFromStringList(currentList,index);
 	}
-	throw hashValueNotExists();
 }
 

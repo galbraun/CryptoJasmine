@@ -87,7 +87,7 @@ randomint32() {
 	uint32_t b = rand();
 	return a << 16 | b;
 }
-
+/*
 static void
 test() {
 	
@@ -172,4 +172,5 @@ void printBits(uint64_t num)
    }
     printf("\n");
 }
+*/
 

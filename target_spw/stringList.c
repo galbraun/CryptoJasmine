@@ -1,7 +1,7 @@
 #include "stringList.h"
 
 Node* createNode(char* key,char* data,Node* next,Node* previous){
-	Node* newNode = malloc(sizeof(Node))
+	Node* newNode = malloc(sizeof(Node));
 	if (newNode==NULL){
 		return NULL;
 	}
@@ -28,7 +28,7 @@ StringList* createStringList(){
 		return NULL;
 	}
 	
-	list->head=NULL:
+	list->head=NULL;
 	list->tail=NULL;
 
     return list;
@@ -53,7 +53,7 @@ void appendToStringList(StringList* list,char* key,char* value){
 }
 
 int findIndexInStringList(StringList* list, char* key){
-	if (list == NULL || str == NULL){
+	if (list == NULL || key == NULL){
 		return -1;
 	}
 	

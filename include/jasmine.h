@@ -191,11 +191,11 @@ typedef struct
 /// shani and gal project ////
 /////////////////////////////
 //#include "gmp.h"
-#define P 0xffffffffffffffc5ull
-#define G 5
+
 #include "eke.h"
-#include "aes.h"
 #include "md5.h"
+#include "aes.h"
+
 #include <inttypes.h>
 #include <stdint.h>
 #include <stdlib.h>

@@ -1,7 +1,8 @@
 #ifndef STRING_LIST
 #define STRING_LIST
 
-#include "Node.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 typedef struct node {
     char* key;
@@ -10,13 +11,15 @@ typedef struct node {
 	struct node* previous;
 } Node;
 
-Node* createNode(char* data,struct node* next,struct node* previous);
-void destroyNode(Node* node);
-
 typedef struct stringList {
     struct Node* head;
 	struct Node* tail;
 } StringList;
+
+Node* createNode(char* key,char* data,Node* next,Node* previous);
+void destroyNode(Node* node);
+
+
 
 
 StringList* createStringList();

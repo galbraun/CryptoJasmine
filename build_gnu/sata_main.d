@@ -23,11 +23,9 @@ sata_main.o: ../sata/sata_main.c ../include/jasmine.h ../include/nand.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/sys/stdio.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/include/stdint.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/include/stdint-gcc.h \
- c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/assert.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/stdlib.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/machine/stdlib.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/string.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/sys/string.h \
- c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/inttypes.h \
- ../include/md5.h ../include/aes.h ../include/eke.h ../include/aes.h \
- ../include/md5.h
+ ../include/md5.h ../include/aes.h \
+ c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/inttypes.h

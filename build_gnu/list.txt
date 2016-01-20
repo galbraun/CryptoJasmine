@@ -17,7 +17,7 @@ c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-ea
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
                               c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o) (__clzsi2)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
-                              sata_main.o (free)
+                              eke.o (malloc)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
                               c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o) (_malloc_r)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
@@ -30,6 +30,8 @@ c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-ea
                               misc.o (srand)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
                               c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o) (_sbrk_r)
+c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-snprintf.o)
+                              eke.o (snprintf)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
                               misc.o (sprintf)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
@@ -41,7 +43,7 @@ c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-ea
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
                               sata_main.o (strncpy)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
-                              c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o) (_svfprintf_r)
+                              c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-snprintf.o) (_svfprintf_r)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
                               uart.o (vsnprintf)
 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
@@ -120,6 +122,7 @@ LOAD flash.o
 LOAD flash_wrapper.o
 LOAD misc.o
 LOAD uart.o
+LOAD eke.o
 LOAD aes.o
 LOAD md5.o
 LOAD init.o
@@ -130,7 +133,7 @@ LOAD c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-no
 END GROUP
                 0x00000000                . = 0x0
 
-.text           0x00000000    0x11e28
+.text           0x00000000    0x135a8
                 0x00000000                entry_point = .
  init.o(INIT)
  INIT           0x00000000       0xc8 init.o
@@ -175,542 +178,562 @@ END GROUP
                 0x00002440                ata_read_buffer
  .text          0x00002450      0x568 sata_isr.o
                 0x00002450                fiq_handler
- .text          0x000029b8      0x814 sata_main.o
+ .text          0x000029b8      0x82c sata_main.o
                 0x000029b8                authentication
                 0x00002cd8                Main
-                0x0000300c                sata_reset
-                0x0000316c                delay
- .text          0x000031cc        0x0 sata_table.o
- .text          0x000031cc      0x49c initialize.o
-                0x000031cc                init_jasmine
- .text          0x00003668      0x5d8 mem_util.o
-                0x00003668                _mem_copy
-                0x000036b0                _mem_bmp_find_sram
-                0x000036fc                _mem_bmp_find_dram
-                0x00003748                _mem_set_sram
-                0x0000378c                _mem_set_dram
-                0x000037d0                _mem_search_min_max
-                0x0000381c                _mem_search_equ
-                0x00003880                _write_dram_32
-                0x000038b0                _write_dram_16
-                0x0000390c                _write_dram_8
-                0x00003964                _set_bit_dram
-                0x000039bc                _clr_bit_dram
-                0x00003a14                _tst_bit_dram
-                0x00003a48                _read_dram_8
-                0x00003a78                _read_dram_16
-                0x00003aac                _read_dram_32
-                0x00003ac8                _mem_cmp_sram
-                0x00003b54                _mem_cmp_dram
- .text          0x00003c40      0x458 flash.o
-                0x00003c40                flash_issue_cmd
-                0x00003c9c                flash_copy
-                0x00003d10                flash_modify_copy
-                0x00003d98                flash_erase
-                0x00003dfc                flash_finish
-                0x00003e10                flash_clear_irq
-                0x00003e48                flash_reset
- .text          0x00004098      0x6c8 flash_wrapper.o
-                0x00004098                nand_page_read
-                0x00004100                nand_page_ptread
-                0x0000416c                nand_page_read_to_host
-                0x00004224                nand_page_ptread_to_host
-                0x000042dc                nand_page_program
-                0x00004344                nand_page_ptprogram
-                0x000043b0                nand_page_program_from_host
-                0x00004464                nand_page_ptprogram_from_host
-                0x00004518                nand_page_copyback
-                0x00004588                nand_page_modified_copyback
-                0x000046b0                nand_block_erase
-                0x00004708                nand_block_erase_sync
- .text          0x00004760      0x990 misc.o
-                0x00004760                led
-                0x00004780                led_blink
-                0x000047b8                swi_handler
-                0x000047bc                irq_handler
-                0x00004884                test_nand_blocks
-                0x00004fec                start_interval_measurement
-                0x00005024                start_timer
-                0x00005058                ptimer_start
-                0x00005064                ptimer_stop_and_uart_print
-                0x000050c4                _sbrk
- .text          0x000050f0      0x498 uart.o
-                0x000050f0                uart_put
-                0x0000510c                uart_gut
-                0x0000512c                uart_init
-                0x00005168                uart_print
-                0x000051c8                uart_print_no_eol
-                0x000051f0                uart_scan
-                0x00005234                uart_print_32
-                0x00005264                uart_print_hex
-                0x00005380                string_to_data
-                0x0000542c                uart_get_line
-                0x000054f0                uart_printf
-                0x0000553c                uart_printf_no_eol
- .text          0x00005588     0x2904 aes.o
-                0x000076e8                AES128_ECB_encrypt
-                0x00007788                AES128_ECB_decrypt
-                0x00007828                AES128_CBC_encrypt_buffer
-                0x00007b64                AES128_CBC_decrypt_buffer
- .text          0x00007e8c      0xf28 md5.o
-                0x00008b38                MD5_Init
-                0x00008b80                MD5_Update
-                0x00008c48                MD5_Final
- .text          0x00008db4        0x0 init.o
- .text          0x00008db4      0x148 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
-                0x00008db4                __divsi3
-                0x00008db4                __aeabi_idiv
-                0x00008edc                __aeabi_idivmod
- .text          0x00008efc        0x4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_dvmd_tls.o)
-                0x00008efc                __aeabi_idiv0
-                0x00008efc                __aeabi_ldiv0
- .text          0x00008f00       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_aeabi_uldivmod.o)
-                0x00008f00                __aeabi_uldivmod
- .text          0x00008f3c       0x80 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
-                0x00008f3c                __gnu_ldivmod_helper
-                0x00008f7c                __gnu_uldivmod_helper
- .text          0x00008fbc      0x4a8 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
-                0x00008fbc                __divdi3
- .text          0x00009464      0x438 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
-                0x00009464                __udivdi3
- .text          0x0000989c      0x114 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
-                0x0000989c                __aeabi_uidiv
-                0x0000989c                __udivsi3
-                0x00009990                __aeabi_uidivmod
- .text          0x000099b0       0x48 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
-                0x000099b0                __clzsi2
- .text          0x000099f8       0x40 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
-                0x000099f8                malloc
-                0x00009a18                free
- .text          0x00009a38      0x70c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
-                0x00009a38                _malloc_r
- .text          0x0000a144      0x1c0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
-                0x0000a144                memcpy
- .text          0x0000a304      0x100 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
-                0x0000a304                memset
- .text          0x0000a404        0x8 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
-                0x0000a404                __malloc_lock
-                0x0000a408                __malloc_unlock
- .text          0x0000a40c       0x78 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
-                0x0000a40c                srand
-                0x0000a428                rand
- .text          0x0000a484       0x40 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
-                0x0000a484                _sbrk_r
- .text          0x0000a4c4       0xdc c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
-                0x0000a4c4                _sprintf_r
-                0x0000a52c                sprintf
- .text          0x0000a5a0      0x1e4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
-                0x0000a5a0                strchr
- .text          0x0000a784       0xf0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
-                0x0000a784                strcpy
- .text          0x0000a874       0x60 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
-                0x0000a874                strlen
- .text          0x0000a8d4       0xe4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
-                0x0000a8d4                strncpy
- .text          0x0000a9b8     0x213c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
-                0x0000a9b8                _svfprintf_r
- .text          0x0000caf4       0xc8 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
-                0x0000caf4                _vsnprintf_r
-                0x0000cb78                vsnprintf
- *fill*         0x0000cbbc        0x4 00
- .text          0x0000cbc0     0x17c0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
-                0x0000cd90                _dtoa_r
- .text          0x0000e380      0x360 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
-                0x0000e380                _malloc_trim_r
-                0x0000e47c                _free_r
- .text          0x0000e6e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
- .text          0x0000e6e0       0xd0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
-                0x0000e6e0                _setlocale_r
-                0x0000e74c                __locale_charset
-                0x0000e758                __locale_mb_cur_max
-                0x0000e768                __locale_msgcharset
-                0x0000e774                __locale_cjk_lang
-                0x0000e77c                _localeconv_r
-                0x0000e788                setlocale
-                0x0000e7a4                localeconv
- .text          0x0000e7b0      0x100 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
-                0x0000e7b0                memchr
- .text          0x0000e8b0      0xd1c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
-                0x0000e8b0                _Balloc
-                0x0000e938                _Bfree
-                0x0000e954                __multadd
-                0x0000ea30                __s2b
-                0x0000eb18                __hi0bits
-                0x0000eb68                __lo0bits
-                0x0000ebf8                __i2b
-                0x0000ec1c                __multiply
-                0x0000ee0c                __pow5mult
-                0x0000ef00                __lshift
-                0x0000f004                __mcmp
-                0x0000f064                __mdiff
-                0x0000f1bc                __ulp
-                0x0000f21c                __b2d
-                0x0000f2e4                __d2b
-                0x0000f3ec                __ratio
-                0x0000f47c                _mprec_log10
-                0x0000f4d0                __copybits
-                0x0000f544                __any_on
- .text          0x0000f5cc      0x1a4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
-                0x0000f5cc                cleanup_glue
-                0x0000f5f8                _reclaim_reent
-                0x0000f700                _wrapup_reent
- .text          0x0000f770       0x8c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
-                0x0000f770                __fpclassifyd
- .text          0x0000f7fc      0x230 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
-                0x0000f7fc                strcmp
- .text          0x0000fa2c     0x1230 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
-                0x0000fa2c                __ssprint_r
-                0x0000fbc0                _svfiprintf_r
- .text          0x00010c5c       0x9c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
-                0x00010c5c                _calloc_r
- .text          0x00010cf8      0x118 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
-                0x00010cf8                memmove
- .text          0x00010e10      0x5c0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
-                0x00010e10                _realloc_r
- .text          0x000113d0      0x41c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_addsubdf3.o)
-                0x000113d0                __aeabi_drsub
-                0x000113d8                __aeabi_dsub
-                0x000113d8                __subdf3
-                0x000113dc                __aeabi_dadd
-                0x000113dc                __adddf3
-                0x000116ec                __floatunsidf
-                0x000116ec                __aeabi_ui2d
-                0x00011710                __floatsidf
-                0x00011710                __aeabi_i2d
-                0x00011738                __aeabi_f2d
-                0x00011738                __extendsfdf2
-                0x00011778                __floatundidf
-                0x00011778                __aeabi_ul2d
-                0x0001178c                __floatdidf
-                0x0001178c                __aeabi_l2d
- .text          0x000117ec      0x49c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_muldivdf3.o)
-                0x000117ec                __aeabi_dmul
-                0x000117ec                __muldf3
-                0x00011a7c                __divdf3
-                0x00011a7c                __aeabi_ddiv
- .text          0x00011c88      0x144 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_cmpdf2.o)
-                0x00011c88                __gtdf2
-                0x00011c88                __gedf2
-                0x00011c90                __ltdf2
-                0x00011c90                __ledf2
-                0x00011c98                __nedf2
-                0x00011c98                __eqdf2
-                0x00011c98                __cmpdf2
-                0x00011d20                __aeabi_cdrcmple
-                0x00011d3c                __aeabi_cdcmpeq
-                0x00011d3c                __aeabi_cdcmple
-                0x00011d54                __aeabi_dcmpeq
-                0x00011d6c                __aeabi_dcmplt
-                0x00011d84                __aeabi_dcmple
-                0x00011d9c                __aeabi_dcmpge
-                0x00011db4                __aeabi_dcmpgt
- .text          0x00011dcc       0x5c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_fixdfsi.o)
-                0x00011dcc                __aeabi_d2iz
-                0x00011dcc                __fixdfsi
+                0x00003024                sata_reset
+                0x00003184                delay
+ .text          0x000031e4        0x0 sata_table.o
+ .text          0x000031e4      0x49c initialize.o
+                0x000031e4                init_jasmine
+ .text          0x00003680      0x5d8 mem_util.o
+                0x00003680                _mem_copy
+                0x000036c8                _mem_bmp_find_sram
+                0x00003714                _mem_bmp_find_dram
+                0x00003760                _mem_set_sram
+                0x000037a4                _mem_set_dram
+                0x000037e8                _mem_search_min_max
+                0x00003834                _mem_search_equ
+                0x00003898                _write_dram_32
+                0x000038c8                _write_dram_16
+                0x00003924                _write_dram_8
+                0x0000397c                _set_bit_dram
+                0x000039d4                _clr_bit_dram
+                0x00003a2c                _tst_bit_dram
+                0x00003a60                _read_dram_8
+                0x00003a90                _read_dram_16
+                0x00003ac4                _read_dram_32
+                0x00003ae0                _mem_cmp_sram
+                0x00003b6c                _mem_cmp_dram
+ .text          0x00003c58      0x458 flash.o
+                0x00003c58                flash_issue_cmd
+                0x00003cb4                flash_copy
+                0x00003d28                flash_modify_copy
+                0x00003db0                flash_erase
+                0x00003e14                flash_finish
+                0x00003e28                flash_clear_irq
+                0x00003e60                flash_reset
+ .text          0x000040b0      0x6c8 flash_wrapper.o
+                0x000040b0                nand_page_read
+                0x00004118                nand_page_ptread
+                0x00004184                nand_page_read_to_host
+                0x0000423c                nand_page_ptread_to_host
+                0x000042f4                nand_page_program
+                0x0000435c                nand_page_ptprogram
+                0x000043c8                nand_page_program_from_host
+                0x0000447c                nand_page_ptprogram_from_host
+                0x00004530                nand_page_copyback
+                0x000045a0                nand_page_modified_copyback
+                0x000046c8                nand_block_erase
+                0x00004720                nand_block_erase_sync
+ .text          0x00004778      0x990 misc.o
+                0x00004778                led
+                0x00004798                led_blink
+                0x000047d0                swi_handler
+                0x000047d4                irq_handler
+                0x0000489c                test_nand_blocks
+                0x00005004                start_interval_measurement
+                0x0000503c                start_timer
+                0x00005070                ptimer_start
+                0x0000507c                ptimer_stop_and_uart_print
+                0x000050dc                _sbrk
+ .text          0x00005108      0x498 uart.o
+                0x00005108                uart_put
+                0x00005124                uart_gut
+                0x00005144                uart_init
+                0x00005180                uart_print
+                0x000051e0                uart_print_no_eol
+                0x00005208                uart_scan
+                0x0000524c                uart_print_32
+                0x0000527c                uart_print_hex
+                0x00005398                string_to_data
+                0x00005444                uart_get_line
+                0x00005508                uart_printf
+                0x00005554                uart_printf_no_eol
+ .text          0x000055a0     0x1638 eke.o
+                0x000066bc                md5Hash
+                0x000068dc                powmodp
+                0x00006b50                randomint64
+                0x00006bbc                randomint32
+ .text          0x00006bd8     0x2904 aes.o
+                0x00008d38                AES128_ECB_encrypt
+                0x00008dd8                AES128_ECB_decrypt
+                0x00008e78                AES128_CBC_encrypt_buffer
+                0x000091b4                AES128_CBC_decrypt_buffer
+ .text          0x000094dc      0xf28 md5.o
+                0x0000a188                MD5_Init
+                0x0000a1d0                MD5_Update
+                0x0000a298                MD5_Final
+ .text          0x0000a404        0x0 init.o
+ .text          0x0000a404      0x148 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
+                0x0000a404                __divsi3
+                0x0000a404                __aeabi_idiv
+                0x0000a52c                __aeabi_idivmod
+ .text          0x0000a54c        0x4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_dvmd_tls.o)
+                0x0000a54c                __aeabi_idiv0
+                0x0000a54c                __aeabi_ldiv0
+ .text          0x0000a550       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_aeabi_uldivmod.o)
+                0x0000a550                __aeabi_uldivmod
+ .text          0x0000a58c       0x80 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
+                0x0000a58c                __gnu_ldivmod_helper
+                0x0000a5cc                __gnu_uldivmod_helper
+ .text          0x0000a60c      0x4a8 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
+                0x0000a60c                __divdi3
+ .text          0x0000aab4      0x438 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
+                0x0000aab4                __udivdi3
+ .text          0x0000aeec      0x114 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
+                0x0000aeec                __aeabi_uidiv
+                0x0000aeec                __udivsi3
+                0x0000afe0                __aeabi_uidivmod
+ .text          0x0000b000       0x48 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
+                0x0000b000                __clzsi2
+ .text          0x0000b048       0x40 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
+                0x0000b048                malloc
+                0x0000b068                free
+ .text          0x0000b088      0x70c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
+                0x0000b088                _malloc_r
+ .text          0x0000b794      0x1c0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
+                0x0000b794                memcpy
+ .text          0x0000b954      0x100 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
+                0x0000b954                memset
+ .text          0x0000ba54        0x8 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
+                0x0000ba54                __malloc_lock
+                0x0000ba58                __malloc_unlock
+ .text          0x0000ba5c       0x78 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
+                0x0000ba5c                srand
+                0x0000ba78                rand
+ .text          0x0000bad4       0x40 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
+                0x0000bad4                _sbrk_r
+ .text          0x0000bb14      0x130 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-snprintf.o)
+                0x0000bb14                _snprintf_r
+                0x0000bba8                snprintf
+ .text          0x0000bc44       0xdc c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
+                0x0000bc44                _sprintf_r
+                0x0000bcac                sprintf
+ .text          0x0000bd20      0x1e4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
+                0x0000bd20                strchr
+ .text          0x0000bf04       0xf0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
+                0x0000bf04                strcpy
+ .text          0x0000bff4       0x60 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
+                0x0000bff4                strlen
+ .text          0x0000c054       0xe4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
+                0x0000c054                strncpy
+ .text          0x0000c138     0x213c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
+                0x0000c138                _svfprintf_r
+ .text          0x0000e274       0xc8 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
+                0x0000e274                _vsnprintf_r
+                0x0000e2f8                vsnprintf
+ *fill*         0x0000e33c        0x4 00
+ .text          0x0000e340     0x17c0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
+                0x0000e510                _dtoa_r
+ .text          0x0000fb00      0x360 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
+                0x0000fb00                _malloc_trim_r
+                0x0000fbfc                _free_r
+ .text          0x0000fe60        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
+ .text          0x0000fe60       0xd0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
+                0x0000fe60                _setlocale_r
+                0x0000fecc                __locale_charset
+                0x0000fed8                __locale_mb_cur_max
+                0x0000fee8                __locale_msgcharset
+                0x0000fef4                __locale_cjk_lang
+                0x0000fefc                _localeconv_r
+                0x0000ff08                setlocale
+                0x0000ff24                localeconv
+ .text          0x0000ff30      0x100 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
+                0x0000ff30                memchr
+ .text          0x00010030      0xd1c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
+                0x00010030                _Balloc
+                0x000100b8                _Bfree
+                0x000100d4                __multadd
+                0x000101b0                __s2b
+                0x00010298                __hi0bits
+                0x000102e8                __lo0bits
+                0x00010378                __i2b
+                0x0001039c                __multiply
+                0x0001058c                __pow5mult
+                0x00010680                __lshift
+                0x00010784                __mcmp
+                0x000107e4                __mdiff
+                0x0001093c                __ulp
+                0x0001099c                __b2d
+                0x00010a64                __d2b
+                0x00010b6c                __ratio
+                0x00010bfc                _mprec_log10
+                0x00010c50                __copybits
+                0x00010cc4                __any_on
+ .text          0x00010d4c      0x1a4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
+                0x00010d4c                cleanup_glue
+                0x00010d78                _reclaim_reent
+                0x00010e80                _wrapup_reent
+ .text          0x00010ef0       0x8c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
+                0x00010ef0                __fpclassifyd
+ .text          0x00010f7c      0x230 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
+                0x00010f7c                strcmp
+ .text          0x000111ac     0x1230 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
+                0x000111ac                __ssprint_r
+                0x00011340                _svfiprintf_r
+ .text          0x000123dc       0x9c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
+                0x000123dc                _calloc_r
+ .text          0x00012478      0x118 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
+                0x00012478                memmove
+ .text          0x00012590      0x5c0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
+                0x00012590                _realloc_r
+ .text          0x00012b50      0x41c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_addsubdf3.o)
+                0x00012b50                __aeabi_drsub
+                0x00012b58                __aeabi_dsub
+                0x00012b58                __subdf3
+                0x00012b5c                __aeabi_dadd
+                0x00012b5c                __adddf3
+                0x00012e6c                __floatunsidf
+                0x00012e6c                __aeabi_ui2d
+                0x00012e90                __floatsidf
+                0x00012e90                __aeabi_i2d
+                0x00012eb8                __aeabi_f2d
+                0x00012eb8                __extendsfdf2
+                0x00012ef8                __floatundidf
+                0x00012ef8                __aeabi_ul2d
+                0x00012f0c                __floatdidf
+                0x00012f0c                __aeabi_l2d
+ .text          0x00012f6c      0x49c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_muldivdf3.o)
+                0x00012f6c                __aeabi_dmul
+                0x00012f6c                __muldf3
+                0x000131fc                __divdf3
+                0x000131fc                __aeabi_ddiv
+ .text          0x00013408      0x144 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_cmpdf2.o)
+                0x00013408                __gtdf2
+                0x00013408                __gedf2
+                0x00013410                __ltdf2
+                0x00013410                __ledf2
+                0x00013418                __nedf2
+                0x00013418                __eqdf2
+                0x00013418                __cmpdf2
+                0x000134a0                __aeabi_cdrcmple
+                0x000134bc                __aeabi_cdcmpeq
+                0x000134bc                __aeabi_cdcmple
+                0x000134d4                __aeabi_dcmpeq
+                0x000134ec                __aeabi_dcmplt
+                0x00013504                __aeabi_dcmple
+                0x0001351c                __aeabi_dcmpge
+                0x00013534                __aeabi_dcmpgt
+ .text          0x0001354c       0x5c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_fixdfsi.o)
+                0x0001354c                __aeabi_d2iz
+                0x0001354c                __fixdfsi
 
-.glue_7         0x00011e28        0x0
+.glue_7         0x000135a8        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x00011e28        0x0
+.glue_7t        0x000135a8        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x00011e28        0x0
+.vfp11_veneer   0x000135a8        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x00011e28        0x0
+.v4_bx          0x000135a8        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.rodata         0x00011e28      0x6b0
+.rodata         0x000135a8      0x6b0
  *(.rodata)
- .rodata        0x00011e28       0x14 sata_main.o
- .rodata        0x00011e3c      0x228 sata_table.o
-                0x00011e3c                ata_cmd_class_table
-                0x00011f3c                ata_command_code_table
-                0x00011f78                ata_function_table
- .rodata        0x00012064        0x8 flash.o
-                0x00012064                c_bank_map
- .rodata        0x0001206c      0x300 aes.o
- .rodata        0x0001236c       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
- .rodata        0x0001238c        0x4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
-                0x0001238c                _global_impure_ptr
- .rodata        0x00012390      0x128 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
-                0x000123a0                __mprec_tens
-                0x00012468                __mprec_bigtens
-                0x00012490                __mprec_tinytens
- .rodata        0x000124b8       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
+ .rodata        0x000135a8       0x14 sata_main.o
+ .rodata        0x000135bc      0x228 sata_table.o
+                0x000135bc                ata_cmd_class_table
+                0x000136bc                ata_command_code_table
+                0x000136f8                ata_function_table
+ .rodata        0x000137e4        0x8 flash.o
+                0x000137e4                c_bank_map
+ .rodata        0x000137ec      0x300 aes.o
+ .rodata        0x00013aec       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
+ .rodata        0x00013b0c        0x4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
+                0x00013b0c                _global_impure_ptr
+ .rodata        0x00013b10      0x128 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
+                0x00013b20                __mprec_tens
+                0x00013be8                __mprec_bigtens
+                0x00013c10                __mprec_tinytens
+ .rodata        0x00013c38       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
 
-.rodata.str1.4  0x000124d8      0x32c
+.rodata.str1.4  0x00013c58      0x334
  .rodata.str1.4
-                0x000124d8      0x14b ftl.o
+                0x00013c58      0x14b ftl.o
                                 0x14c (size before relaxing)
- *fill*         0x00012623        0x1 00
+ *fill*         0x00013da3        0x1 00
  .rodata.str1.4
-                0x00012624       0x29 sata_identify.o
+                0x00013da4       0x29 sata_identify.o
                                  0x2c (size before relaxing)
- *fill*         0x0001264d        0x3 00
+ *fill*         0x00013dcd        0x3 00
  .rodata.str1.4
-                0x00012650       0xdb sata_main.o
+                0x00013dd0       0xdb sata_main.o
                                  0xdc (size before relaxing)
- *fill*         0x0001272b        0x1 00
+ *fill*         0x00013eab        0x1 00
  .rodata.str1.4
-                0x0001272c       0x1a initialize.o
+                0x00013eac       0x1a initialize.o
                                  0x1c (size before relaxing)
- *fill*         0x00012746        0x2 00
+ *fill*         0x00013ec6        0x2 00
  .rodata.str1.4
-                0x00012748       0x53 misc.o
+                0x00013ec8       0x53 misc.o
                                  0x54 (size before relaxing)
- *fill*         0x0001279b        0x1 00
+ *fill*         0x00013f1b        0x1 00
  .rodata.str1.4
-                0x0001279c        0x2 uart.o
+                0x00013f1c        0x2 uart.o
                                   0x8 (size before relaxing)
- *fill*         0x0001279e        0x2 00
+ *fill*         0x00013f1e        0x2 00
  .rodata.str1.4
-                0x000127a0       0x42 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
+                0x00013f20        0x5 eke.o
+                                  0x8 (size before relaxing)
+ *fill*         0x00013f25        0x3 00
+ .rodata.str1.4
+                0x00013f28       0x42 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
                                  0x44 (size before relaxing)
- *fill*         0x000127e2        0x2 00
+ *fill*         0x00013f6a        0x2 00
  .rodata.str1.4
-                0x000127e4       0x10 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
+                0x00013f6c       0x10 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
                                  0x14 (size before relaxing)
  .rodata.str1.4
-                0x000127f4        0x2 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
+                0x00013f7c        0x2 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
                                   0x4 (size before relaxing)
- *fill*         0x000127f6        0x2 00
+ *fill*         0x00013f7e        0x2 00
  .rodata.str1.4
-                0x000127f8        0xc c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
+                0x00013f80        0xc c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
                                  0x14 (size before relaxing)
  .rodata.str1.4
                 0x00000000       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
 
-.ARM.extab      0x00012804        0x0
- .ARM.extab     0x00012804        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
- .ARM.extab     0x00012804        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
+.ARM.extab      0x00013f8c        0x0
+ .ARM.extab     0x00013f8c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
+ .ARM.extab     0x00013f8c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
 
-.ARM.exidx      0x00012804        0x8
- .ARM.exidx     0x00012804        0x8 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
- .ARM.exidx     0x0001280c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
+.ARM.exidx      0x00013f8c        0x8
+ .ARM.exidx     0x00013f8c        0x8 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
+ .ARM.exidx     0x00013f94        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
                                   0x8 (size before relaxing)
 
-.data           0x00012810      0xae4
+.data           0x00013f98      0xae4
  *(.data)
- .data          0x00012810        0x0 ftl.o
- .data          0x00012810      0x200 sata_identify.o
-                0x00012810                ht_identify_data
- .data          0x00012a10        0x0 sata_cmd.o
- .data          0x00012a10        0x0 sata_isr.o
- .data          0x00012a10        0x1 sata_main.o
-                0x00012a10                messageStatus
- .data          0x00012a11        0x0 sata_table.o
- .data          0x00012a11        0x0 initialize.o
- .data          0x00012a11        0x0 mem_util.o
- *fill*         0x00012a11        0x3 00
- .data          0x00012a14       0x20 flash.o
-                0x00012a14                c_bank_rmap
- .data          0x00012a34        0x0 flash_wrapper.o
- .data          0x00012a34        0x0 misc.o
- .data          0x00012a34        0x0 uart.o
- .data          0x00012a34        0x0 aes.o
- .data          0x00012a34        0x0 md5.o
- .data          0x00012a34        0x0 init.o
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_dvmd_tls.o)
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_aeabi_uldivmod.o)
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
- .data          0x00012a34        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
- .data          0x00012a34      0x410 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
-                0x00012a34                __malloc_av_
-                0x00012e3c                __malloc_sbrk_base
-                0x00012e40                __malloc_trim_threshold
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
- .data          0x00012e44        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
- *fill*         0x00012e44        0x4 00
- .data          0x00012e48      0x430 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
-                0x00012e48                _impure_ptr
- .data          0x00013278       0x7c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
-                0x00013298                __mb_cur_max
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_addsubdf3.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_muldivdf3.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_cmpdf2.o)
- .data          0x000132f4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_fixdfsi.o)
+ .data          0x00013f98        0x0 ftl.o
+ .data          0x00013f98      0x200 sata_identify.o
+                0x00013f98                ht_identify_data
+ .data          0x00014198        0x0 sata_cmd.o
+ .data          0x00014198        0x0 sata_isr.o
+ .data          0x00014198        0x1 sata_main.o
+                0x00014198                messageStatus
+ .data          0x00014199        0x0 sata_table.o
+ .data          0x00014199        0x0 initialize.o
+ .data          0x00014199        0x0 mem_util.o
+ *fill*         0x00014199        0x3 00
+ .data          0x0001419c       0x20 flash.o
+                0x0001419c                c_bank_rmap
+ .data          0x000141bc        0x0 flash_wrapper.o
+ .data          0x000141bc        0x0 misc.o
+ .data          0x000141bc        0x0 uart.o
+ .data          0x000141bc        0x0 eke.o
+ .data          0x000141bc        0x0 aes.o
+ .data          0x000141bc        0x0 md5.o
+ .data          0x000141bc        0x0 init.o
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_dvmd_tls.o)
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_aeabi_uldivmod.o)
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
+ .data          0x000141bc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
+ .data          0x000141bc      0x410 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
+                0x000141bc                __malloc_av_
+                0x000145c4                __malloc_sbrk_base
+                0x000145c8                __malloc_trim_threshold
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-snprintf.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
+ .data          0x000145cc        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
+ *fill*         0x000145cc        0x4 00
+ .data          0x000145d0      0x430 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
+                0x000145d0                _impure_ptr
+ .data          0x00014a00       0x7c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
+                0x00014a20                __mb_cur_max
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_addsubdf3.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_muldivdf3.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_cmpdf2.o)
+ .data          0x00014a7c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_fixdfsi.o)
 
-.bss            0x000132f4     0x24a8
+.bss            0x00014a7c     0x24a8
  *(.bss)
- .bss           0x000132f4     0x14a0 ftl.o
- .bss           0x00014794        0x0 sata_identify.o
- .bss           0x00014794        0x0 sata_cmd.o
- .bss           0x00014794        0x0 sata_isr.o
- .bss           0x00014794       0x84 sata_main.o
-                0x00014794                messageToUser
- .bss           0x00014818        0x0 sata_table.o
- .bss           0x00014818        0x0 initialize.o
- .bss           0x00014818        0x0 mem_util.o
- .bss           0x00014818        0x0 flash.o
- .bss           0x00014818        0x0 flash_wrapper.o
- .bss           0x00014818       0x44 misc.o
- .bss           0x0001485c        0x0 uart.o
- .bss           0x0001485c       0xbc aes.o
- .bss           0x00014918        0x0 md5.o
- .bss           0x00014918        0x0 init.o
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_dvmd_tls.o)
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_aeabi_uldivmod.o)
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
- .bss           0x00014918        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
- .bss           0x00014918       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
-                0x00014918                __malloc_top_pad
-                0x0001491c                __malloc_current_mallinfo
-                0x00014944                __malloc_max_sbrked_mem
-                0x00014948                __malloc_max_total_mem
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
- .bss           0x0001494c        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
- .bss           0x0001494c        0xc c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
-                0x0001494c                __nlocale_changed
-                0x00014950                __mlocale_changed
-                0x00014954                _PathLocale
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_addsubdf3.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_muldivdf3.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_cmpdf2.o)
- .bss           0x00014958        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_fixdfsi.o)
- COMMON         0x00014958       0x10 ftl.o
-                0x00014958                systemAuthenticationState
-                0x00014959                currentState
-                0x0001495c                g_ftl_read_buf_id
-                0x00014960                g_ftl_write_buf_id
-                0x00014964                commandCounter
- COMMON         0x00014968      0x424 sata_main.o
-                0x00014968                g_sata_context
-                0x00014984                g_sata_action_flags
-                0x00014988                g_sata_ncq
- COMMON         0x00014d8c      0x200 mem_util.o
-                0x00014d8c                g_temp_mem
- COMMON         0x00014f8c      0x80c misc.o
-                0x00014f8c                g_sdram_ecc_fail_count
-                0x00014f90                g_timer_interrupt_count
-                0x00014f94                g_sdram_ecc_count
-                0x00014f98                __HEAP_START
- COMMON         0x00015798        0x4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
-                0x00015798                errno
-                0x000132f4                Image$$ER_ZI$$ZI$$Base = LOADADDR (.bss)
+ .bss           0x00014a7c     0x14a0 ftl.o
+ .bss           0x00015f1c        0x0 sata_identify.o
+ .bss           0x00015f1c        0x0 sata_cmd.o
+ .bss           0x00015f1c        0x0 sata_isr.o
+ .bss           0x00015f1c       0x84 sata_main.o
+                0x00015f1c                messageToUser
+ .bss           0x00015fa0        0x0 sata_table.o
+ .bss           0x00015fa0        0x0 initialize.o
+ .bss           0x00015fa0        0x0 mem_util.o
+ .bss           0x00015fa0        0x0 flash.o
+ .bss           0x00015fa0        0x0 flash_wrapper.o
+ .bss           0x00015fa0       0x44 misc.o
+ .bss           0x00015fe4        0x0 uart.o
+ .bss           0x00015fe4        0x0 eke.o
+ .bss           0x00015fe4       0xbc aes.o
+ .bss           0x000160a0        0x0 md5.o
+ .bss           0x000160a0        0x0 init.o
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_dvmd_tls.o)
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_aeabi_uldivmod.o)
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
+ .bss           0x000160a0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
+ .bss           0x000160a0       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
+                0x000160a0                __malloc_top_pad
+                0x000160a4                __malloc_current_mallinfo
+                0x000160cc                __malloc_max_sbrked_mem
+                0x000160d0                __malloc_max_total_mem
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-snprintf.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
+ .bss           0x000160d4        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
+ .bss           0x000160d4        0xc c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
+                0x000160d4                __nlocale_changed
+                0x000160d8                __mlocale_changed
+                0x000160dc                _PathLocale
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_addsubdf3.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_muldivdf3.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_cmpdf2.o)
+ .bss           0x000160e0        0x0 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_fixdfsi.o)
+ COMMON         0x000160e0       0x10 ftl.o
+                0x000160e0                systemAuthenticationState
+                0x000160e1                currentState
+                0x000160e4                g_ftl_read_buf_id
+                0x000160e8                g_ftl_write_buf_id
+                0x000160ec                commandCounter
+ COMMON         0x000160f0      0x424 sata_main.o
+                0x000160f0                g_sata_context
+                0x0001610c                g_sata_action_flags
+                0x00016110                g_sata_ncq
+ COMMON         0x00016514      0x200 mem_util.o
+                0x00016514                g_temp_mem
+ COMMON         0x00016714      0x80c misc.o
+                0x00016714                g_sdram_ecc_fail_count
+                0x00016718                g_timer_interrupt_count
+                0x0001671c                g_sdram_ecc_count
+                0x00016720                __HEAP_START
+ COMMON         0x00016f20        0x4 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
+                0x00016f20                errno
+                0x00014a7c                Image$$ER_ZI$$ZI$$Base = LOADADDR (.bss)
                 0x000024a8                Image$$ER_ZI$$ZI$$Length = SIZEOF (.bss)
-                0x000132f4                size_of_firmware_image = LOADADDR (.bss)
+                0x00014a7c                size_of_firmware_image = LOADADDR (.bss)
                 0x00000000                _start = entry_point
 OUTPUT(firmware.elf elf32-littlearm)
 
-.debug_abbrev   0x00000000     0x1995
+.debug_abbrev   0x00000000     0x1b7a
  .debug_abbrev  0x00000000      0x303 ftl.o
  .debug_abbrev  0x00000303      0x19e sata_identify.o
  .debug_abbrev  0x000004a1      0x1a7 sata_cmd.o
  .debug_abbrev  0x00000648      0x1cb sata_isr.o
- .debug_abbrev  0x00000813      0x2ed sata_main.o
- .debug_abbrev  0x00000b00       0xa1 sata_table.o
- .debug_abbrev  0x00000ba1       0xd5 initialize.o
- .debug_abbrev  0x00000c76      0x207 mem_util.o
- .debug_abbrev  0x00000e7d      0x19c flash.o
- .debug_abbrev  0x00001019      0x15e flash_wrapper.o
- .debug_abbrev  0x00001177      0x275 misc.o
- .debug_abbrev  0x000013ec      0x21a uart.o
- .debug_abbrev  0x00001606      0x252 aes.o
- .debug_abbrev  0x00001858      0x13d md5.o
+ .debug_abbrev  0x00000813      0x30b sata_main.o
+ .debug_abbrev  0x00000b1e       0xa1 sata_table.o
+ .debug_abbrev  0x00000bbf       0xd5 initialize.o
+ .debug_abbrev  0x00000c94      0x207 mem_util.o
+ .debug_abbrev  0x00000e9b      0x19c flash.o
+ .debug_abbrev  0x00001037      0x15e flash_wrapper.o
+ .debug_abbrev  0x00001195      0x275 misc.o
+ .debug_abbrev  0x0000140a      0x21a uart.o
+ .debug_abbrev  0x00001624      0x1c7 eke.o
+ .debug_abbrev  0x000017eb      0x252 aes.o
+ .debug_abbrev  0x00001a3d      0x13d md5.o
 
-.debug_info     0x00000000     0x5d40
+.debug_info     0x00000000     0x67b8
  .debug_info    0x00000000      0xc74 ftl.o
  .debug_info    0x00000c74      0x438 sata_identify.o
  .debug_info    0x000010ac      0xa2d sata_cmd.o
  .debug_info    0x00001ad9      0x793 sata_isr.o
- .debug_info    0x0000226c      0x8c1 sata_main.o
- .debug_info    0x00002b2d      0x1d4 sata_table.o
- .debug_info    0x00002d01      0x20f initialize.o
- .debug_info    0x00002f10      0x9bf mem_util.o
- .debug_info    0x000038cf      0x3d6 flash.o
- .debug_info    0x00003ca5      0x717 flash_wrapper.o
- .debug_info    0x000043bc      0x574 misc.o
- .debug_info    0x00004930      0x5cb uart.o
- .debug_info    0x00004efb      0xb5c aes.o
- .debug_info    0x00005a57      0x2e9 md5.o
+ .debug_info    0x0000226c      0x927 sata_main.o
+ .debug_info    0x00002b93      0x1d4 sata_table.o
+ .debug_info    0x00002d67      0x20f initialize.o
+ .debug_info    0x00002f76      0x9c1 mem_util.o
+ .debug_info    0x00003937      0x3d6 flash.o
+ .debug_info    0x00003d0d      0x717 flash_wrapper.o
+ .debug_info    0x00004424      0x574 misc.o
+ .debug_info    0x00004998      0x5cb uart.o
+ .debug_info    0x00004f63      0xa10 eke.o
+ .debug_info    0x00005973      0xb5c aes.o
+ .debug_info    0x000064cf      0x2e9 md5.o
 
-.debug_line     0x00000000     0x30c2
+.debug_line     0x00000000     0x3425
  .debug_line    0x00000000      0x553 ftl.o
  .debug_line    0x00000553      0x147 sata_identify.o
  .debug_line    0x0000069a      0x1cd sata_cmd.o
  .debug_line    0x00000867      0x1df sata_isr.o
- .debug_line    0x00000a46      0x2b1 sata_main.o
- .debug_line    0x00000cf7       0x72 sata_table.o
- .debug_line    0x00000d69      0x1ed initialize.o
- .debug_line    0x00000f56      0x1a4 mem_util.o
- .debug_line    0x000010fa      0x18f flash.o
- .debug_line    0x00001289      0x24f flash_wrapper.o
- .debug_line    0x000014d8      0x262 misc.o
- .debug_line    0x0000173a      0x1eb uart.o
- .debug_line    0x00001925     0x10a8 aes.o
- .debug_line    0x000029cd      0x6f5 md5.o
+ .debug_line    0x00000a46      0x2be sata_main.o
+ .debug_line    0x00000d04       0x72 sata_table.o
+ .debug_line    0x00000d76      0x1ed initialize.o
+ .debug_line    0x00000f63      0x1a4 mem_util.o
+ .debug_line    0x00001107      0x18f flash.o
+ .debug_line    0x00001296      0x24f flash_wrapper.o
+ .debug_line    0x000014e5      0x262 misc.o
+ .debug_line    0x00001747      0x1eb uart.o
+ .debug_line    0x00001932      0x356 eke.o
+ .debug_line    0x00001c88     0x10a8 aes.o
+ .debug_line    0x00002d30      0x6f5 md5.o
 
-.debug_loc      0x00000000     0x60a3
- .debug_loc     0x00000000     0x1433 ftl.o
- .debug_loc     0x00001433      0x1ba sata_identify.o
- .debug_loc     0x000015ed      0x4e9 sata_cmd.o
- .debug_loc     0x00001ad6      0x4ca sata_isr.o
- .debug_loc     0x00001fa0      0x325 sata_main.o
- .debug_loc     0x000022c5       0x94 initialize.o
- .debug_loc     0x00002359      0xbd3 mem_util.o
- .debug_loc     0x00002f2c      0x368 flash.o
- .debug_loc     0x00003294      0x5fb flash_wrapper.o
- .debug_loc     0x0000388f      0x484 misc.o
- .debug_loc     0x00003d13      0x42e uart.o
- .debug_loc     0x00004141     0x196f aes.o
- .debug_loc     0x00005ab0      0x5f3 md5.o
+.debug_loc      0x00000000     0xdadf
+ .debug_loc     0x00000000     0x1440 ftl.o
+ .debug_loc     0x00001440      0x1ba sata_identify.o
+ .debug_loc     0x000015fa      0x4e9 sata_cmd.o
+ .debug_loc     0x00001ae3      0x4ca sata_isr.o
+ .debug_loc     0x00001fad      0x325 sata_main.o
+ .debug_loc     0x000022d2       0x94 initialize.o
+ .debug_loc     0x00002366      0xbfc mem_util.o
+ .debug_loc     0x00002f62      0x368 flash.o
+ .debug_loc     0x000032ca      0x5fb flash_wrapper.o
+ .debug_loc     0x000038c5      0x484 misc.o
+ .debug_loc     0x00003d49      0x42e uart.o
+ .debug_loc     0x00004177     0x7a06 eke.o
+ .debug_loc     0x0000bb7d     0x196f aes.o
+ .debug_loc     0x0000d4ec      0x5f3 md5.o
 
 .debug_pubnames
-                0x00000000      0xf3b
+                0x00000000      0xf85
  .debug_pubnames
                 0x00000000       0xd6 ftl.o
  .debug_pubnames
@@ -736,12 +759,14 @@ OUTPUT(firmware.elf elf32-littlearm)
  .debug_pubnames
                 0x00000d36      0x14d uart.o
  .debug_pubnames
-                0x00000e83       0x7c aes.o
+                0x00000e83       0x4a eke.o
  .debug_pubnames
-                0x00000eff       0x3c md5.o
+                0x00000ecd       0x7c aes.o
+ .debug_pubnames
+                0x00000f49       0x3c md5.o
 
 .debug_pubtypes
-                0x00000000      0x6c7
+                0x00000000      0x70f
  .debug_pubtypes
                 0x00000000       0xc1 ftl.o
  .debug_pubtypes
@@ -767,11 +792,13 @@ OUTPUT(firmware.elf elf32-littlearm)
  .debug_pubtypes
                 0x000005cd       0x87 uart.o
  .debug_pubtypes
-                0x00000654       0x45 aes.o
+                0x00000654       0x48 eke.o
  .debug_pubtypes
-                0x00000699       0x2e md5.o
+                0x0000069c       0x45 aes.o
+ .debug_pubtypes
+                0x000006e1       0x2e md5.o
 
-.debug_aranges  0x00000000      0x1a0
+.debug_aranges  0x00000000      0x1c0
  .debug_aranges
                 0x00000000       0x20 ftl.o
  .debug_aranges
@@ -795,21 +822,24 @@ OUTPUT(firmware.elf elf32-littlearm)
  .debug_aranges
                 0x00000140       0x20 uart.o
  .debug_aranges
-                0x00000160       0x20 aes.o
+                0x00000160       0x20 eke.o
  .debug_aranges
-                0x00000180       0x20 md5.o
+                0x00000180       0x20 aes.o
+ .debug_aranges
+                0x000001a0       0x20 md5.o
 
-.debug_ranges   0x00000000     0x1d80
+.debug_ranges   0x00000000     0x2568
  .debug_ranges  0x00000000      0x348 ftl.o
  .debug_ranges  0x00000348       0x40 sata_identify.o
  .debug_ranges  0x00000388       0xf8 sata_isr.o
- .debug_ranges  0x00000480      0x110 sata_main.o
- .debug_ranges  0x00000590       0x30 flash_wrapper.o
- .debug_ranges  0x000005c0       0xc0 misc.o
- .debug_ranges  0x00000680       0x28 uart.o
- .debug_ranges  0x000006a8     0x16d8 aes.o
+ .debug_ranges  0x00000480      0x100 sata_main.o
+ .debug_ranges  0x00000580       0x30 flash_wrapper.o
+ .debug_ranges  0x000005b0       0xc0 misc.o
+ .debug_ranges  0x00000670       0x28 uart.o
+ .debug_ranges  0x00000698      0x7f8 eke.o
+ .debug_ranges  0x00000e90     0x16d8 aes.o
 
-.debug_str      0x00000000     0x1ada
+.debug_str      0x00000000     0x1b31
  .debug_str     0x00000000      0x527 ftl.o
                                 0x602 (size before relaxing)
  .debug_str     0x00000527      0x1a7 sata_identify.o
@@ -819,7 +849,7 @@ OUTPUT(firmware.elf elf32-littlearm)
  .debug_str     0x00000f2d       0xfb sata_isr.o
                                 0x87d (size before relaxing)
  .debug_str     0x00001028      0x201 sata_main.o
-                                0x528 (size before relaxing)
+                                0x5d5 (size before relaxing)
  .debug_str     0x00001229       0x15 sata_table.o
                                 0x22a (size before relaxing)
  .debug_str     0x0000123e       0x58 initialize.o
@@ -834,9 +864,11 @@ OUTPUT(firmware.elf elf32-littlearm)
                                 0x37b (size before relaxing)
  .debug_str     0x00001817      0x10b uart.o
                                 0x2f5 (size before relaxing)
- .debug_str     0x00001922      0x135 aes.o
+ .debug_str     0x00001922       0x72 eke.o
+                                0x14e (size before relaxing)
+ .debug_str     0x00001994      0x12e aes.o
                                 0x241 (size before relaxing)
- .debug_str     0x00001a57       0x83 md5.o
+ .debug_str     0x00001ac2       0x6f md5.o
                                 0x15e (size before relaxing)
 
 .comment        0x00000000       0x2a
@@ -853,6 +885,7 @@ OUTPUT(firmware.elf elf32-littlearm)
  .comment       0x00000000       0x2b flash_wrapper.o
  .comment       0x00000000       0x2b misc.o
  .comment       0x00000000       0x2b uart.o
+ .comment       0x00000000       0x2b eke.o
  .comment       0x00000000       0x2b aes.o
  .comment       0x00000000       0x2b md5.o
 
@@ -883,91 +916,95 @@ OUTPUT(firmware.elf elf32-littlearm)
  .ARM.attributes
                 0x0000023c       0x34 uart.o
  .ARM.attributes
-                0x00000270       0x34 aes.o
+                0x00000270       0x34 eke.o
  .ARM.attributes
-                0x000002a4       0x34 md5.o
+                0x000002a4       0x34 aes.o
  .ARM.attributes
-                0x000002d8       0x24 init.o
+                0x000002d8       0x34 md5.o
  .ARM.attributes
-                0x000002fc       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
+                0x0000030c       0x24 init.o
  .ARM.attributes
-                0x00000316       0x18 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_dvmd_tls.o)
+                0x00000330       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
  .ARM.attributes
-                0x0000032e       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_aeabi_uldivmod.o)
+                0x0000034a       0x18 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_dvmd_tls.o)
  .ARM.attributes
-                0x00000348       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
+                0x00000362       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_aeabi_uldivmod.o)
  .ARM.attributes
-                0x0000037c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
+                0x0000037c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
  .ARM.attributes
-                0x000003b0       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
+                0x000003b0       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
  .ARM.attributes
-                0x000003e4       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
+                0x000003e4       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
  .ARM.attributes
-                0x000003fe       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
+                0x00000418       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
  .ARM.attributes
-                0x00000418       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
+                0x00000432       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_clzsi2.o)
  .ARM.attributes
-                0x0000044c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
+                0x0000044c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
  .ARM.attributes
-                0x00000480       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
+                0x00000480       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
  .ARM.attributes
-                0x000004b4       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
+                0x000004b4       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
  .ARM.attributes
-                0x000004e8       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
+                0x000004e8       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
  .ARM.attributes
-                0x0000051c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
+                0x0000051c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
  .ARM.attributes
-                0x00000550       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
+                0x00000550       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
  .ARM.attributes
-                0x00000584       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
+                0x00000584       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
  .ARM.attributes
-                0x000005b8       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
+                0x000005b8       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-snprintf.o)
  .ARM.attributes
-                0x000005ec       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
+                0x000005ec       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
  .ARM.attributes
-                0x00000620       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
+                0x00000620       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
  .ARM.attributes
-                0x00000654       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
+                0x00000654       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
  .ARM.attributes
-                0x00000688       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
+                0x00000688       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
  .ARM.attributes
-                0x000006bc       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
+                0x000006bc       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
  .ARM.attributes
-                0x000006f0       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
+                0x000006f0       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
  .ARM.attributes
-                0x00000724       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
+                0x00000724       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
  .ARM.attributes
-                0x00000758       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
+                0x00000758       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
  .ARM.attributes
-                0x0000078c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
+                0x0000078c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
  .ARM.attributes
-                0x000007c0       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
+                0x000007c0       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-impure.o)
  .ARM.attributes
-                0x000007f4       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
+                0x000007f4       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
  .ARM.attributes
-                0x00000828       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
+                0x00000828       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
  .ARM.attributes
-                0x0000085c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
+                0x0000085c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
  .ARM.attributes
-                0x00000890       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
+                0x00000890       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
  .ARM.attributes
-                0x000008c4       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
+                0x000008c4       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
  .ARM.attributes
-                0x000008f8       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
+                0x000008f8       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
  .ARM.attributes
-                0x0000092c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
+                0x0000092c       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
  .ARM.attributes
-                0x00000960       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
+                0x00000960       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
  .ARM.attributes
-                0x00000994       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_addsubdf3.o)
+                0x00000994       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
  .ARM.attributes
-                0x000009ae       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_muldivdf3.o)
+                0x000009c8       0x34 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
  .ARM.attributes
-                0x000009c8       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_cmpdf2.o)
+                0x000009fc       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_addsubdf3.o)
  .ARM.attributes
-                0x000009e2       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_fixdfsi.o)
+                0x00000a16       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_muldivdf3.o)
+ .ARM.attributes
+                0x00000a30       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_cmpdf2.o)
+ .ARM.attributes
+                0x00000a4a       0x1a c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_arm_fixdfsi.o)
 
-.debug_frame    0x00000000     0x15bc
+.debug_frame    0x00000000     0x16dc
  .debug_frame   0x00000000      0x180 ftl.o
  .debug_frame   0x00000180       0x48 sata_identify.o
  .debug_frame   0x000001c8      0x1b8 sata_cmd.o
@@ -979,36 +1016,38 @@ OUTPUT(firmware.elf elf32-littlearm)
  .debug_frame   0x000006dc      0x174 flash_wrapper.o
  .debug_frame   0x00000850       0xf0 misc.o
  .debug_frame   0x00000940      0x134 uart.o
- .debug_frame   0x00000a74      0x16c aes.o
- .debug_frame   0x00000be0       0x8c md5.o
- .debug_frame   0x00000c6c       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
- .debug_frame   0x00000c8c       0x50 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
- .debug_frame   0x00000cdc       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
- .debug_frame   0x00000d18       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
- .debug_frame   0x00000d54       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
- .debug_frame   0x00000d74       0x40 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
- .debug_frame   0x00000db4       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
- .debug_frame   0x00000df0       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
- .debug_frame   0x00000e20       0x28 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
- .debug_frame   0x00000e48       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
- .debug_frame   0x00000e78       0x38 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
- .debug_frame   0x00000eb0       0x2c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
- .debug_frame   0x00000edc       0x60 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
- .debug_frame   0x00000f3c       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
- .debug_frame   0x00000f6c       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
- .debug_frame   0x00000f8c       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
- .debug_frame   0x00000fac       0x2c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
- .debug_frame   0x00000fd8       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
- .debug_frame   0x00001014       0x50 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
- .debug_frame   0x00001064       0x64 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
- .debug_frame   0x000010c8       0x50 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
- .debug_frame   0x00001118       0x98 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
- .debug_frame   0x000011b0       0x2c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
- .debug_frame   0x000011dc      0x228 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
- .debug_frame   0x00001404       0x68 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
- .debug_frame   0x0000146c       0x28 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
- .debug_frame   0x00001494       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
- .debug_frame   0x000014c4       0x68 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
- .debug_frame   0x0000152c       0x28 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
- .debug_frame   0x00001554       0x2c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
- .debug_frame   0x00001580       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)
+ .debug_frame   0x00000a74       0xc4 eke.o
+ .debug_frame   0x00000b38      0x16c aes.o
+ .debug_frame   0x00000ca4       0x8c md5.o
+ .debug_frame   0x00000d30       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divsi3.o)
+ .debug_frame   0x00000d50       0x50 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(bpabi.o)
+ .debug_frame   0x00000da0       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_divdi3.o)
+ .debug_frame   0x00000ddc       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivdi3.o)
+ .debug_frame   0x00000e18       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1\libgcc.a(_udivsi3.o)
+ .debug_frame   0x00000e38       0x40 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-malloc.o)
+ .debug_frame   0x00000e78       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mallocr.o)
+ .debug_frame   0x00000eb4       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memcpy.o)
+ .debug_frame   0x00000ee4       0x28 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memset.o)
+ .debug_frame   0x00000f0c       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mlock.o)
+ .debug_frame   0x00000f3c       0x38 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-rand.o)
+ .debug_frame   0x00000f74       0x2c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sbrkr.o)
+ .debug_frame   0x00000fa0       0x5c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-snprintf.o)
+ .debug_frame   0x00000ffc       0x60 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-sprintf.o)
+ .debug_frame   0x0000105c       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strchr.o)
+ .debug_frame   0x0000108c       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcpy.o)
+ .debug_frame   0x000010ac       0x20 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strlen.o)
+ .debug_frame   0x000010cc       0x2c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strncpy.o)
+ .debug_frame   0x000010f8       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfprintf.o)
+ .debug_frame   0x00001134       0x50 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-vsnprintf.o)
+ .debug_frame   0x00001184       0x64 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-dtoa.o)
+ .debug_frame   0x000011e8       0x50 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-freer.o)
+ .debug_frame   0x00001238       0x98 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-locale.o)
+ .debug_frame   0x000012d0       0x2c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memchr.o)
+ .debug_frame   0x000012fc      0x228 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-mprec.o)
+ .debug_frame   0x00001524       0x68 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reent.o)
+ .debug_frame   0x0000158c       0x28 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-s_fpclassify.o)
+ .debug_frame   0x000015b4       0x30 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-strcmp.o)
+ .debug_frame   0x000015e4       0x68 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-svfiprintf.o)
+ .debug_frame   0x0000164c       0x28 c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-callocr.o)
+ .debug_frame   0x00001674       0x2c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-memmove.o)
+ .debug_frame   0x000016a0       0x3c c:/program files (x86)/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/lib\libc.a(lib_a-reallocr.o)

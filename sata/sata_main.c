@@ -18,9 +18,6 @@
 
 
 #include "jasmine.h"
-#include "eke.h"
-#include "aes.h"
-#include "md5.h"
 
 sata_context_t		g_sata_context;
 sata_ncq_t			g_sata_ncq;
@@ -232,13 +229,34 @@ void Main(void)
 				for ( int k=0 ; k< strlen(messageToUser); k++){
 					write_dram_8(RD_BUF_PTR(g_ftl_read_buf_id)+(36*BYTES_PER_SECTOR)+k,messageToUser[k]);
 				}
+/*
+				SETREG(SATA_FIS_D2H_4,0xFFFFFFFF);
+				SETREG(SATA_SECT_CNT,0xFFFFFFFF);
+				SETREG(SATA_XFER_BYTES,0xFFFFFFFF);
+				SETREG(SATA_FIS_D2H_3,0xFFFFFFFF);
+				SETREG(SATA_FIS_D2H_1,0xFFFFFFFF);
+				SETREG(SATA_FIS_D2H_2,0xFFFFFFFF);
+				SETREG(FCP_DMA_CNT,0xFFFFFFFF);
+				SETREG(SATA_FIS_D2H_0,0xFFFFFFFF);
+		*/		
+				SETREG(SATA_FIS_D2H_3,0x0);
+				SETREG(SATA_FIS_D2H_1,0x0);
+				SETREG(SATA_FIS_D2H_2,0x0);
 
-				SETREG(SATA_SECT_CNT, -5);
+				UINT32 fis_type = FISTYPE_REGISTER_D2H;
+				UINT32 flags = B_IRQ;
+				UINT32 status = 1;
+
+				SETREG(SATA_FIS_D2H_0, fis_type | (flags << 8) | (status << 16) | (0 << 24));
+							
 				SETREG(SATA_RBUF_PTR, g_ftl_read_buf_id);	// change sata_read_ptr
 				SETREG(BM_STACK_RDSET, next_read_buf_id);	// change bm_read_limit
 				SETREG(BM_STACK_RESET, 0x02);				// change bm_read_limit
 				
 				g_ftl_read_buf_id = next_read_buf_id;
+				
+				SETREG(SATA_CTRL_2, SEND_NON_DATA_FIS);
+
 				continue;
 			}
 			
