@@ -14,6 +14,7 @@ typedef struct node {
 typedef struct stringList {
     struct Node* head;
 	struct Node* tail;
+	int size;
 } StringList;
 
 Node* createNode(char* key,char* data,Node* next,Node* previous);
@@ -28,6 +29,7 @@ void removeFromStringList(StringList* list,int index);
 void clearStringList(StringList* list);
 bool isStringListEmpty(StringList* list);
 int findIndexInStringList(StringList* list, char* key);
-char** getValueInStringList(StringList* list, int index);
+void getKeyValueInStringList(StringList* list, int index,char*** key,char*** value);
+int getStringListSize(StringList* list);
 
 #endif

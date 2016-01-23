@@ -48,7 +48,12 @@ void authentication(char* message,int lba,int sectCount) {
 	 char* username;
 	 char* userData;
 	 char* hashedPass_server;
-	 				int i;
+	 static uint32_t serverChallengeAck;
+	 static uint32_t serverChallenge;
+	 static uint32_t userChallenge;
+	 static uint64_t server_public;
+	 static uint64_t server_random;
+	 int i;
 
 	 
 	 UINT32 sect_offset = lba % SECTORS_PER_PAGE;
@@ -69,9 +74,9 @@ void authentication(char* message,int lba,int sectCount) {
 				
 				hashedPass_server = md5Hash(password,strlen(password));
 				uart_printf("hashedPass_server: %s\n",hashedPass_server);
-				uint64_t server_random = randomint64();
+				server_random = randomint64();
 				uart_printf("server_random= %" PRIx64 "\n", server_random);
-				uint64_t server_public = powmodp(G, server_random);
+				server_public = powmodp(G, server_random);
 				uart_printf("server_public= %" PRIx64 "\n", server_public);
 
 				AES128_CBC_decrypt_buffer(result+0, buffer+0,  16, hashedPass_server, iv);
@@ -85,7 +90,7 @@ void authentication(char* message,int lba,int sectCount) {
 				
 				uint64_t server_symetricKey = powmodp(decryptedKey,server_random);
 				uart_printf("server_symetricKey= %" PRIx64 "\n", server_symetricKey);
-				uint32_t serverChallenge = randomint32();
+				serverChallenge = randomint32();
 				uart_printf("(32bit)serverChallenge= %" PRIx64 "\n", serverChallenge);
 				
 				AES128_CBC_encrypt_buffer(messageToUser, &serverChallenge, sizeof(serverChallenge), &server_symetricKey, iv);
@@ -106,16 +111,42 @@ void authentication(char* message,int lba,int sectCount) {
 					write_dram_8(RD_BUF_PTR(g_ftl_read_buf_id)+(36*BYTES_PER_SECTOR)+k,messageToUser[k]);
 				}
 
-//				SETREG(SATA_SECT_CNT, -5);
 				SETREG(SATA_RBUF_PTR, g_ftl_read_buf_id);	// change sata_read_ptr
 				SETREG(BM_STACK_RDSET, next_read_buf_id);	// change bm_read_limit
 				SETREG(BM_STACK_RESET, 0x02);				// change bm_read_limit
 				
 				g_ftl_read_buf_id = next_read_buf_id;
 			break; 
-		case SEND_SERVER_KEY_CHALLENGE:
-		
-		default:
+		case GET_USER_CHALLENGE:	
+			serverChallengeAck=message;
+			userChallenge = strchr(message,'|')+1;
+			
+			*(strchr(message,'|'))=0;
+			
+			strncpy(buffer,serverChallengeAck,strlen(serverChallengeAck));
+			
+			AES128_CBC_decrypt_buffer(result+0, buffer+0,  16, server_symetricKey, iv);
+			AES128_CBC_decrypt_buffer(result+16, buffer+16, 16, 0, 0);
+			AES128_CBC_decrypt_buffer(result+32, buffer+32, 16, 0, 0);
+			AES128_CBC_decrypt_buffer(result+48, buffer+48, 16, 0, 0);
+			
+			// do manipulation on challenge ( xor with symetric key?)
+			
+			if ( serverChallengeAck != serverChallenge ){
+				//authenticationFailed
+			}
+			
+			strncpy(buffer,userChallenge,strlen(userChallenge));
+			
+			AES128_CBC_decrypt_buffer(result+0, buffer+0,  16, server_symetricKey, iv);
+			AES128_CBC_decrypt_buffer(result+16, buffer+16, 16, 0, 0);
+			AES128_CBC_decrypt_buffer(result+32, buffer+32, 16, 0, 0);
+			AES128_CBC_decrypt_buffer(result+48, buffer+48, 16, 0, 0);
+			
+			// do some manipulation of userChallenge (xor with symetric key? ) and send it to user
+			
+			AES128_CBC_encrypt_buffer(messageToUser, &serverChallenge, sizeof(serverChallenge), &server_symetricKey, iv);
+	default:
 			break;
 	}	
 }
@@ -140,6 +171,43 @@ static int autherization(char* user, char* password,UINT32 bank){
 
 	return status;
 } 
+
+static void notAuthenticated(int lba){
+	uart_printf("not authenticated...problem!");
+	UINT32 sect_offset  = lba % SECTORS_PER_PAGE;
+	strcpy(messageToUser,"NOT AUTHENTICATED!");
+	int i;
+	
+	UINT32 next_read_buf_id = (g_ftl_read_buf_id + 1) % NUM_RD_BUFFERS;
+	
+	while (next_read_buf_id == GETREG(SATA_RBUF_PTR));
+	
+	for ( int k=0 ; k< strlen(messageToUser); k++){
+		write_dram_8(RD_BUF_PTR(g_ftl_read_buf_id)+(36*BYTES_PER_SECTOR)+k,messageToUser[k]);
+	}
+				
+	SETREG(SATA_RBUF_PTR, g_ftl_read_buf_id);	// change sata_read_ptr
+	SETREG(BM_STACK_RDSET, next_read_buf_id);	// change bm_read_limit
+	SETREG(BM_STACK_RESET, 0x02);				// change bm_read_limit
+	
+	UINT32 status = (B_DRDY|BIT4|B_ERR);
+	UINT32 err_code = B_AUTH;
+	UINT32 fis_type = FISTYPE_REGISTER_D2H;
+	UINT32 flags = B_IRQ;
+	SETREG(SATA_FIS_D2H_0, fis_type | (flags << 8) | (status << 16) | (err_code << 24));
+	SETREG(SATA_FIS_D2H_1, GETREG(SATA_FIS_H2D_1));
+	SETREG(SATA_FIS_D2H_2, GETREG(SATA_FIS_H2D_2) & 0x00FFFFFF);
+	SETREG(SATA_FIS_D2H_3, GETREG(SATA_FIS_H2D_3) & 0x0000FFFF);
+	SETREG(SATA_FIS_D2H_4, 0);
+	SETREG(SATA_FIS_D2H_LEN, 5);
+	SETREG(SATA_INT_STAT,OPERATION_ERR);
+	SETREG(APB_INT_STS, INTR_SATA);
+	SETREG(SATA_CTRL_2,PIO_READ | COMPLETE);
+	
+	g_ftl_read_buf_id = next_read_buf_id;
+	
+	uart_printf("%d %d %d %d %d\n",GETREG(SATA_PHY_STATUS),GETREG(SATA_FIS_D2H_0),GETREG(SATA_FIS_D2H_1),GETREG(SATA_FIS_D2H_2),GETREG(SATA_FIS_D2H_3),GETREG(SATA_FIS_D2H_4));
+}
 
 ////////////////////////////////////
 
@@ -217,46 +285,7 @@ void Main(void)
 			
 			// checking user is authenticated - if not return an error to user
 			if ( cmd.cmd_type == READ && cmd.lba == 96 ){  // if ( systemAuthenticationState == NOT_AUTHENTICATED && messageStatus == MESSAGE_INVALID_STATE )
-				uart_printf("not authenticated...problem!");
-				UINT32 sect_offset  = cmd.lba % SECTORS_PER_PAGE;
-				strcpy(messageToUser,"NOT AUTHENTICATED!");
-				int i;
-				
-				UINT32 next_read_buf_id = (g_ftl_read_buf_id + 1) % NUM_RD_BUFFERS;
-				
-				while (next_read_buf_id == GETREG(SATA_RBUF_PTR));
-				
-				for ( int k=0 ; k< strlen(messageToUser); k++){
-					write_dram_8(RD_BUF_PTR(g_ftl_read_buf_id)+(36*BYTES_PER_SECTOR)+k,messageToUser[k]);
-				}
-/*
-				SETREG(SATA_FIS_D2H_4,0xFFFFFFFF);
-				SETREG(SATA_SECT_CNT,0xFFFFFFFF);
-				SETREG(SATA_XFER_BYTES,0xFFFFFFFF);
-				SETREG(SATA_FIS_D2H_3,0xFFFFFFFF);
-				SETREG(SATA_FIS_D2H_1,0xFFFFFFFF);
-				SETREG(SATA_FIS_D2H_2,0xFFFFFFFF);
-				SETREG(FCP_DMA_CNT,0xFFFFFFFF);
-				SETREG(SATA_FIS_D2H_0,0xFFFFFFFF);
-		*/		
-				SETREG(SATA_FIS_D2H_3,0x0);
-				SETREG(SATA_FIS_D2H_1,0x0);
-				SETREG(SATA_FIS_D2H_2,0x0);
-
-				UINT32 fis_type = FISTYPE_REGISTER_D2H;
-				UINT32 flags = B_IRQ;
-				UINT32 status = 1;
-
-				SETREG(SATA_FIS_D2H_0, fis_type | (flags << 8) | (status << 16) | (0 << 24));
-							
-				SETREG(SATA_RBUF_PTR, g_ftl_read_buf_id);	// change sata_read_ptr
-				SETREG(BM_STACK_RDSET, next_read_buf_id);	// change bm_read_limit
-				SETREG(BM_STACK_RESET, 0x02);				// change bm_read_limit
-				
-				g_ftl_read_buf_id = next_read_buf_id;
-				
-				SETREG(SATA_CTRL_2, SEND_NON_DATA_FIS);
-
+				notAuthenticated(cmd.lba);
 				continue;
 			}
 			
@@ -277,17 +306,25 @@ void Main(void)
 					currentState = GET_USER_KEY;
 					authentication(message,cmd.lba,cmd.sector_count);
 				} else {
-					currentState = SEND_SERVER_KEY_CHALLENGE;
+					currentState = GET_USER_CHALLENGE;
 					authentication(message,cmd.lba,cmd.sector_count);
 				}
 			}
 			
 			if ( cmd.cmd_type == READ && cmd.lba == 96 ) { // user reading data from Jasmine - authentication process
-				char message[BYTES_PER_SECTOR] = {0};
-				//while (messageStatus == MESSAGE_INVALID_STATE); // wait for the message to be ready for read
-				currentState = SEND_TO_USER;
-				authentication(message,cmd.lba,cmd.sector_count);
-				currentState = GET_USER_CHALLENGE;
+				if (currentState == GET_USER_KEY){
+					char message[BYTES_PER_SECTOR] = {0};
+					currentState = SEND_TO_USER;
+					authentication(message,cmd.lba,cmd.sector_count);
+					currentState = GET_USER_CHALLENGE;
+				} else {
+					char message[BYTES_PER_SECTOR] = {0};
+					currentState = SEND_TO_USER;
+					authentication(message,cmd.lba,cmd.sector_count);
+					currentState = AUTHENTICATION_FINISHED;
+					systemAuthenticationState = AUTHENTICATED;
+					// user verify server and then authentication finish
+				}
 				continue;
 			}
 						

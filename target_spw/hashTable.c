@@ -6,7 +6,7 @@ int hashingHashTable(HashTable* hashTable,char* key){
 	for (p=key; *p; p++){
 		h = (hashTable->T[h])^ *p; /* Xor */
 	}
-	return h;
+	return h % hashTable->currentSize;
 }
 
 
@@ -95,7 +95,9 @@ char** findInHashTable(HashTable* hashTable,char* key){
 	if (index == -1 ){
 		return NULL;
 	}
-	return getValueInStringList(currentList,index);
+	char** value;
+	getKeyValueInStringList(currentList,index,NULL,&value);
+	return value;
 }
 
 
@@ -108,11 +110,65 @@ void insertToHashTable(HashTable* hashTable,char* key,char* value){
 //	}
 }
 
-void removeFromHashTable(HashTable* hashTable,char* key){
+int removeFromHashTable(HashTable* hashTable,char* key){
 	StringList* currentList = hashTable->table[hashingHashTable(hashTable,key)];
 	int index = findIndexInStringList(currentList,key);
 	if (index != -1){
 		removeFromStringList(currentList,index);
 	}
+	return index;
 }
 
+void clearHashTable(HashTable* hashTable){
+	for (int i = 0; i < hashTable->currentSize ; i++){
+		clearStringList(hashTable->table[i]);
+		free(hashTable->table[i]);
+	}
+	
+	free(hashTable->T);
+	free(hashTable);
+}
+
+int serializeTable(HashTable* hashTable, char** buffer){	
+  int bufferIndex = 0; 
+  uint8_t sizeOfKey = 0;
+  uint8_t sizeOfData = 0;
+  char** key;
+  char** data;
+  
+  for (int i=0;i<hashTable->currentSize;i++){
+		for (int j=0;j<getStringListSize(hashTable->table[i]);j++){
+			getKeyValueInStringList(hashTable->table[i],j,&key,&data);
+			sizeOfKey = strlen(*key);
+			sizeOfData = strlen(*data);
+			
+			memcpy(buffer[bufferIndex], &sizeOfKey, sizeof(sizeOfKey));
+			bufferIndex += sizeof(uint8_t);
+			memcpy(buffer[bufferIndex],key,sizeOfKey);
+			bufferIndex += sizeOfKey;
+			memcpy(buffer[bufferIndex], &sizeOfData, sizeof(sizeOfData));
+			bufferIndex += sizeof(uint8_t);
+			memcpy(buffer[bufferIndex],data,sizeOfData);
+			bufferIndex += sizeOfData;
+		}
+  }
+  
+  return bufferIndex; // return to know the size of the buffer
+  // maybe in the end  need to encrypt string? or not needed?
+  
+}
+
+
+
+/*
+HashTable* deserializeTable(char* buffer,int bufferSize){
+	
+	HashTable* newHashTable = createHashTable();
+	
+	while ()
+	
+	for (int i=0;i<bufferSize;i++){
+		char** 
+	}
+}
+*/

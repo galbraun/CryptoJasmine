@@ -111,6 +111,9 @@ extern sata_context_t	g_sata_context;
 #define B_ICRC	BIT7
 #define	B_HOB	BIT7
 #define	B_SRST	BIT2
+///////////// GAL AND SHANI PROJECT ///////////////
+#define B_AUTH	BIT1|BIT2
+///////////////////////////////////////////////////
 
 typedef enum
 {

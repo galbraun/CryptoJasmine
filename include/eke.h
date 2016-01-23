@@ -6,7 +6,7 @@
 #define G 5
 
 #include <stdio.h>
-#include <stdint.h>
+//#include <stdint.h>
 //#include <assert.h>
 #include <stdlib.h>
 #include <string.h>

@@ -20,6 +20,10 @@ void destroyNode(Node* node){
 	free(node);
 }
 
+int getStringListSize(StringList* list){
+	return list->size;
+}
+
 
 StringList* createStringList(){
 	StringList* list = malloc(sizeof(StringList));
@@ -28,6 +32,7 @@ StringList* createStringList(){
 		return NULL;
 	}
 	
+	list->size=0;
 	list->head=NULL;
 	list->tail=NULL;
 
@@ -48,8 +53,10 @@ void appendToStringList(StringList* list,char* key,char* value){
 		list->tail = newNode;
 		return;
 	}
-	list->tail->next = newNode;
+	Node* tail = list->tail;
+	tail->next = newNode;
 	list->tail = newNode;
+	list->size+=1;
 }
 
 int findIndexInStringList(StringList* list, char* key){
@@ -57,7 +64,8 @@ int findIndexInStringList(StringList* list, char* key){
 		return -1;
 	}
 	
-	for (int i = 0 , Node* iter = list->head ; iter != NULL ; iter = iter->next,i++ ){
+	Node* iter = list->head ;
+	for (int i = 0 ; iter != NULL ; iter = iter->next,i++ ){
 		if ( strcmp(iter->key,key) ){
 			return i;
 		}
@@ -66,16 +74,24 @@ int findIndexInStringList(StringList* list, char* key){
 	return -1;
 }
 
-char** getValueInStringList(StringList* list, int index){
+void getKeyValueInStringList(StringList* list, int index,char*** key,char*** value){
 	if (list == NULL){
 		return -1;
 	}
 	
-	for (int i = 0, Node* ptr = list->head ; i<index ; i++ ){
+	
+	Node* ptr = list->head;
+	for (int i = 0 ; i<index ; i++ ){
 		ptr = ptr->next;
 	}
 	
-	return &ptr->data;
+	if (key != NULL){
+		*key = &ptr->key;
+	}
+	
+	if (value != NULL){
+		*value = &ptr->data;
+	}
 }
 
 void clearStringList(StringList* list){
@@ -85,10 +101,11 @@ void clearStringList(StringList* list){
 	
 	Node* iter = list->head ;
 	while (iter != NULL){
-		tmp = iter->next;
+		Node* tmp = iter->next;
 		destroyNode(iter);
 		iter=tmp;
 	}
+	list->size=0;
 }
 
 void removeFromStringList(StringList* list,int index){
@@ -96,24 +113,25 @@ void removeFromStringList(StringList* list,int index){
 		return -1;
 	}
 	
-	for (int i = 0, Node* ptr = list->head ; i<index ; i++ ){
+	
+	Node* ptr = list->head;
+	for ( int i = 0; i<index ; i++ ){
 		ptr = ptr->next;
 	}
 	
 
-	if (ptr != head){
+	if (ptr != list->head){
 		ptr->previous->next = ptr->next;
 	}
 	else {
 		list->head = ptr->next;
 	}
-	if (ptr != tail){
+	if (ptr != list->tail){
 		ptr->next->previous = ptr->previous;
 	}
 	else {
 		list->tail = ptr->previous;
 	}
-	
+	list->size-=1;
 	destroyNode(ptr);
 }
-
