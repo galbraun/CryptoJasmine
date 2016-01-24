@@ -24,7 +24,7 @@ void destroyNode(Node* node);
 
 
 StringList* createStringList();
-void appendToStringList(StringList* list,char* key,char* value);
+bool appendToStringList(StringList* list,char* key,char* value);
 void removeFromStringList(StringList* list,int index);
 void clearStringList(StringList* list);
 bool isStringListEmpty(StringList* list);

@@ -95,16 +95,17 @@ char** findInHashTable(HashTable* hashTable,char* key){
 	if (index == -1 ){
 		return NULL;
 	}
+
 	char** value;
 	getKeyValueInStringList(currentList,index,NULL,&value);
 	return value;
 }
 
 
-void insertToHashTable(HashTable* hashTable,char* key,char* value){
+bool insertToHashTable(HashTable* hashTable,char* key,char* value){
 	StringList* currentList = hashTable->table[hashingHashTable(hashTable,key)];
 //	bool isEmpty = currentList.isEmpty();
-	appendToStringList(currentList,key,value);
+	return appendToStringList(currentList,key,value);
 //	if (isEmpty){
 //		hashTable->numOfFullCells++;
 //	}
@@ -125,6 +126,7 @@ void clearHashTable(HashTable* hashTable){
 		free(hashTable->table[i]);
 	}
 	
+	free(hashTable->table);
 	free(hashTable->T);
 	free(hashTable);
 }
@@ -172,3 +174,16 @@ HashTable* deserializeTable(char* buffer,int bufferSize){
 	}
 }
 */
+
+void printHashTable(HashTable* hashTable){
+	for (int i = 0; i < hashTable->currentSize ; i++){
+		printf("list number %d\n\n",i);
+		for (int j=0;j<getStringListSize(hashTable->table[i]);j++){
+			char** key;
+			char** data;
+			getKeyValueInStringList(hashTable->table[i],j,&key,&data);
+			printf("key - %s , value -%s\n",*key,*data);
+		}
+		printf("\n");
+	}
+}

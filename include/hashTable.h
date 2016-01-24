@@ -23,8 +23,12 @@ typedef struct hashTable {
 HashTable* createHashTable();
 bool isTableFull(HashTable* hashTable);
 char** findInHashTable(HashTable* hashTable,char* key);
-void insertToHashTable(HashTable* hashTable,char* key,char* value);
+bool insertToHashTable(HashTable* hashTable,char* key,char* value);
 int removeFromHashTable(HashTable* hashTable,char* key);
 void clearHashTable(HashTable* hashTable);
+
+//// DELETE THIS 
+void printHashTable(HashTable* hashTable);
+///////////////////////////////////////////
 
 #endif

@@ -14,7 +14,6 @@ Node* createNode(char* key,char* data,Node* next,Node* previous){
 }
 
 void destroyNode(Node* node){
-	free(node->data);
 	node->next=NULL;
 	node->previous=NULL;
 	free(node);
@@ -43,7 +42,7 @@ bool isStringListEmpty(StringList* list){
 	return list->head == NULL;
 }
 
-void appendToStringList(StringList* list,char* key,char* value){
+bool appendToStringList(StringList* list,char* key,char* value){
 	Node* newNode = createNode(key,value,list->head,NULL);
 	if (newNode==NULL){
 		return false;
@@ -51,12 +50,14 @@ void appendToStringList(StringList* list,char* key,char* value){
 	if (isStringListEmpty(list)){
 		list->head = newNode;
 		list->tail = newNode;
-		return;
+		list->size = 1;
+		return true;
 	}
 	Node* tail = list->tail;
 	tail->next = newNode;
 	list->tail = newNode;
 	list->size+=1;
+	return true;
 }
 
 int findIndexInStringList(StringList* list, char* key){
@@ -66,10 +67,11 @@ int findIndexInStringList(StringList* list, char* key){
 	
 	Node* iter = list->head ;
 	for (int i = 0 ; iter != NULL ; iter = iter->next,i++ ){
-		if ( strcmp(iter->key,key) ){
+		if ( strcmp(iter->key,key) == 0 ){
 			return i;
 		}
 	}
+	
 	
 	return -1;
 }
@@ -78,7 +80,6 @@ void getKeyValueInStringList(StringList* list, int index,char*** key,char*** val
 	if (list == NULL){
 		return -1;
 	}
-	
 	
 	Node* ptr = list->head;
 	for (int i = 0 ; i<index ; i++ ){
