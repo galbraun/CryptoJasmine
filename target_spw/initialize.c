@@ -132,6 +132,7 @@ void init_jasmine(void)
 	
 	//// GAL AND SHANI PROJECT ///////////////
 	currentState = INVALID_STATE;
+	//	passwordTable = createHashTable();
 	//////////////////////////////////////
 	
     ftl_open();

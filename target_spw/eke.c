@@ -74,6 +74,7 @@ powmodp(uint64_t a, uint64_t b) {
 
 uint64_t
 randomint64() {
+	//TODO: check  if rand is rand? 
 	uint64_t a = rand();
 	uint64_t b = rand();
 	uint64_t c = rand();

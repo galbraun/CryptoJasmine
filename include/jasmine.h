@@ -202,15 +202,16 @@ typedef struct
 #include <stdio.h>
 #include <string.h>
 
-#define PASSWORD_FILE "passFile"
+//#define passwordBufferAddress 0x10
+//#define passwordBufferSizeAddress 0x20
 
 typedef enum {
+	INVALID_STATE,
 	GET_USER_KEY,
 	GET_USER_CHALLENGE,
 	SEND_SERVER_KEY_CHALLENGE,
 	SEND_TO_USER,
 	AUTHENTICATION_FINISHED,
-	INVALID_STATE
 } authenticationState;
 
 typedef enum {
@@ -230,6 +231,7 @@ int commandCounter;
 
 authenticationState currentState; // after an authentication process began - sign in which step in the process 
 
+//HashTable* passwordTable;
 
 ////////////////////////////////
 

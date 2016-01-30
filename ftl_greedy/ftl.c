@@ -295,7 +295,6 @@ void ftl_open(void)
 	SETREG(FCONF_PAUSE, FIRQ_DATA_CORRUPT | FIRQ_BADBLK_L | FIRQ_BADBLK_H);
 		
 	enable_irq();
-	
 }
 
 void ftl_flush(void)
