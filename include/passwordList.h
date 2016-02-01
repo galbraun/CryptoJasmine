@@ -2,23 +2,26 @@
 #define PASSWORD_LIST
 
 #include <stdbool.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <inttypes.h>
+#include "jasmine.h"
 
 #define BANKS_AMOUNT 32
 
 typedef struct node {
     char* user;
 	char* password;
-	bool banksReadPermissions[BANKS_AMOUNT];
-	bool banksWritePermissions[BANKS_AMOUNT];
+	int banksReadPermissions[BANKS_AMOUNT];
+	int banksWritePermissions[BANKS_AMOUNT];
     struct node* next;
 	struct node* previous;
 } Node;
 
 typedef struct passwordList {
-    struct Node* head;
-	struct Node* tail;
+    Node* head;
+	Node* tail;
 	int size;
 } PasswordList;
 
@@ -37,12 +40,12 @@ bool addReadPermissions(PasswordList* list,char* user,int bank);
 bool addWritePermissions(PasswordList* list,char* user,int bank);
 bool removeReadPermissions(PasswordList* list,char* user,int bank);
 bool removeWritePermissions(PasswordList* list,char* user,int bank);
-bool checkReadPermissions(PasswordList* list,char* user,int bank);
-bool checkWritePermissions(PasswordList* list,char* user,int bank);
+int checkReadPermissions(PasswordList* list,char* user,int bank);
+int checkWritePermissions(PasswordList* list,char* user,int bank);
 
 char** getUserPasswordPointer(PasswordList* list,char* user);
-bool** getUserReadPermissionsPointer(PasswordList* list,char* user);
-bool** getUserWritePermissionsPointer(PasswordList* list,char* user);
+int** getUserReadPermissionsPointer(PasswordList* list,char* user);
+int** getUserWritePermissionsPointer(PasswordList* list,char* user);
 
 
 #endif

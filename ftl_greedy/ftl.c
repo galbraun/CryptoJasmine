@@ -290,11 +290,17 @@ void ftl_open(void)
 
     // This example FTL can handle runtime bad block interrupts and read fail (uncorrectable bit errors) interrupts
     flash_clear_irq();
-
+	
     SETREG(INTR_MASK, FIRQ_DATA_CORRUPT | FIRQ_BADBLK_L | FIRQ_BADBLK_H);
 	SETREG(FCONF_PAUSE, FIRQ_DATA_CORRUPT | FIRQ_BADBLK_L | FIRQ_BADBLK_H);
 		
+					uart_printf("AFTER FORMAT");
+
+		
 	enable_irq();
+
+					uart_printf("AFTER ENABLE IRQ");
+
 }
 
 void ftl_flush(void)

@@ -21,6 +21,10 @@
 
 void init_jasmine(void)
 {	
+
+				uart_printf("INIT STARTED");
+
+
 	UINT32 i, bank;
 	extern UINT32 Image$$ER_ZI$$ZI$$Base;
 	extern UINT32 Image$$ER_ZI$$ZI$$Length;
@@ -130,17 +134,15 @@ void init_jasmine(void)
 	sata_reset();
 	#endif
 	
-	//// GAL AND SHANI PROJECT ///////////////
-	currentState = INVALID_STATE;
-	//	passwordTable = createHashTable();
-	//////////////////////////////////////
-	
     ftl_open();
 	
 	#if OPTION_FTL_TEST == TRUE
-	extern void ftl_test();
+	extern void ftl_test(void);
 	ftl_test();
     led(1);
     while (1);
     #endif
+
+	uart_printf("INIT FINISHED");
+
 }

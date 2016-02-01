@@ -196,14 +196,12 @@ typedef struct
 #include "md5.h"
 #include "aes.h"
 
-#include <inttypes.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-//#define passwordBufferAddress 0x10
-//#define passwordBufferSizeAddress 0x20
+//#define passwordBufferAddress 0x20
+//#define passwordBufferSizeAddress 0x10
 
 typedef enum {
 	INVALID_STATE,
@@ -230,8 +228,6 @@ systemState systemAuthenticationState; // 3 stages : initial state so format and
 int commandCounter;
 
 authenticationState currentState; // after an authentication process began - sign in which step in the process 
-
-//HashTable* passwordTable;
 
 ////////////////////////////////
 

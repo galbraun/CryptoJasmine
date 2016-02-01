@@ -12,11 +12,11 @@ Node* createNode(char* user,char* password,Node* next,Node* previous){
 	newNode->previous = previous;
 	
 	for (int i=0; i<BANKS_AMOUNT; i++){
-		newNode->banksReadPermissions[i] = false;
+		newNode->banksReadPermissions[i] = 0;
 	}
 	
 	for (int i=0; i<BANKS_AMOUNT; i++){
-		newNode->banksWritePermissions[i] = false;
+		newNode->banksWritePermissions[i] = 0;
 	}
 	return newNode;
 }
@@ -78,9 +78,9 @@ bool checkIfUserExists(PasswordList* list,char* user){
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
-		if ( strcmp(iter->user,user) == 0 ){
+		/*if ( strcmp(iter->user,user) == 0 ){
 			return true;
-		}
+		}*/
 	}
 	
 	return false;
@@ -93,39 +93,39 @@ char** getUserPasswordPointer(PasswordList* list,char* user){
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
-		if ( strcmp(iter->user,user) == 0 ){
+		/*if ( strcmp(iter->user,user) == 0 ){
 			return &iter->password;
-		}
+		}*/
 	}
 	
 	return NULL;
 }
 
-bool** getUserReadPermissionsPointer(PasswordList* list,char* user){
+int** getUserReadPermissionsPointer(PasswordList* list,char* user){
 	if (getPasswordListSize(list)==0){
 		return NULL;
 	}
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
-		if ( strcmp(iter->user,user) == 0 ){
+		/*if ( strcmp(iter->user,user) == 0 ){
 			return &iter->banksReadPermissions;
-		}
+		}*/
 	}
 	
 	return NULL;
 }
 
-bool** getUserWritePermissionsPointer(PasswordList* list,char* user){
+int** getUserWritePermissionsPointer(PasswordList* list,char* user){
 	if (getPasswordListSize(list)==0){
 		return NULL;
 	}
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
-		if ( strcmp(iter->user,user) == 0 ){
+		/*if ( strcmp(iter->user,user) == 0 ){
 			return &iter->banksWritePermissions;
-		}
+		}*/
 	}
 	
 	return NULL;
@@ -149,9 +149,9 @@ bool removeUser(PasswordList* list,char* user){
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
-		if ( strcmp(iter->user,user) == 0 ){
-			break;
-		}
+		/*if ( strcmp(iter->user,user) == 0 ){
+			return false;
+		}*/
 	}
 	
 
@@ -169,6 +169,8 @@ bool removeUser(PasswordList* list,char* user){
 	}
 	list->size-=1;
 	destroyNode(iter);
+	
+	return true;
 }
 
 bool addReadPermissions(PasswordList* list,char* user,int bank){
@@ -178,10 +180,10 @@ bool addReadPermissions(PasswordList* list,char* user,int bank){
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
-		if ( strcmp(iter->user,user) == 0 ){
-			iter->banksReadPermissions[bank] = true;
+		/*if ( strcmp(iter->user,user) == 0 ){
+			iter->banksReadPermissions[bank] = 1;
 			return true;
-		}
+		}*/
 	}
 	
 	return false;
@@ -194,10 +196,12 @@ bool addWritePermissions(PasswordList* list,char* user,int bank){
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
+		/*
 		if ( strcmp(iter->user,user) == 0 ){
-			iter->banksWritePermissions[bank] = true;
+			iter->banksWritePermissions[bank] = 1;
 			return true;
 		}
+		*/
 	}
 	
 	return false;
@@ -210,10 +214,12 @@ bool removeReadPermissions(PasswordList* list,char* user,int bank){
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
+		/*
 		if ( strcmp(iter->user,user) == 0 ){
-			iter->banksReadPermissions[bank] = false;
+			iter->banksReadPermissions[bank] = 0;
 			return true;
 		}
+		*/
 	}
 	
 	return false;
@@ -226,51 +232,57 @@ bool removeWritePermissions(PasswordList* list,char* user,int bank){
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
+		/*
 		if ( strcmp(iter->user,user) == 0 ){
-			iter->banksWritePermissions[bank] = false;
+			iter->banksWritePermissions[bank] = 0;
 			return true;
 		}
+		*/
 	}
 	
 	return false;
 }
 
-bool checkReadPermissions(PasswordList* list,char* user,int bank){
+int checkReadPermissions(PasswordList* list,char* user,int bank){
 	if (!checkIfUserExists(list,user)){
-		return false;
+		return 0;
 	}
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
+		/*
 		if ( strcmp(iter->user,user) == 0 ){
 			return iter->banksReadPermissions[bank];
 		}
+		*/
 	}
 	
-	return false;
+	return 0;
 }
 
 
-bool checkWritePermissions(PasswordList* list,char* user,int bank){
+int checkWritePermissions(PasswordList* list,char* user,int bank){
 	if (!checkIfUserExists(list,user)){
-		return false;
+		return 0;
 	}
 	
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
+		/*
 		if ( strcmp(iter->user,user) == 0 ){
 			return iter->banksWritePermissions[bank];
 		}
+		*/
 	}
 	
-	return false;
+	return 0;
 }
 
-int serializePasswordList(PasswordList* list, char* buffer){	
+int serializePasswordList(PasswordList* list, char** buffer){	
 	int bufferIndex = 0; 
 	uint8_t sizeOfKey = 0;
 	uint8_t sizeOfData = 0;
-
+/*
   
 	Node* iter;
 	for ( iter = list->head ; iter != NULL ; iter = iter->next ){
@@ -278,38 +290,40 @@ int serializePasswordList(PasswordList* list, char* buffer){
 		sizeOfData = strlen(iter->password)+1;
 		
 		// save size of key
-		memcpy(&buffer[bufferIndex], &sizeOfKey, sizeof(sizeOfKey));
-		bufferIndex += sizeof(uint8_t);
+		mem_copy(&((*buffer)[bufferIndex]), &sizeOfKey, sizeof(sizeOfKey));
+		bufferIndex += sizeof(sizeOfKey);
 		
 		// save key
-		memcpy(&buffer[bufferIndex],iter->user,sizeOfKey);
+		mem_copy(&((*buffer)[bufferIndex]),&iter->user,sizeOfKey);
 		bufferIndex += sizeOfKey;
 
 		//save size of data
-		memcpy(&buffer[bufferIndex], &sizeOfData, sizeof(sizeOfData));
-		bufferIndex += sizeof(uint8_t);
+		mem_copy(&((*buffer)[bufferIndex]), &sizeOfData, sizeof(sizeOfData));
+		bufferIndex += sizeof(sizeOfData);
 		
 		//save data
-		memcpy(&buffer[bufferIndex],iter->password,sizeOfData);
+		mem_copy(&((*buffer)[bufferIndex]),&iter->password,sizeOfData);
 		bufferIndex += sizeOfData;		
 		
 		//save read permissions
-		memcpy(&buffer[bufferIndex],iter->banksReadPermissions,BANKS_AMOUNT*sizeof(bool));
-		bufferIndex += BANKS_AMOUNT*sizeof(bool);		
+		mem_copy(&((*buffer)[bufferIndex]),&iter->banksReadPermissions,BANKS_AMOUNT*sizeof(int));
+		bufferIndex += BANKS_AMOUNT*sizeof(int);		
 		
 		//save write permissions
-		memcpy(&buffer[bufferIndex],iter->banksWritePermissions,BANKS_AMOUNT*sizeof(bool));
-		bufferIndex += BANKS_AMOUNT*sizeof(bool);	
+		mem_copy(&((*buffer)[bufferIndex]),&iter->banksWritePermissions,BANKS_AMOUNT*sizeof(int));
+		bufferIndex += BANKS_AMOUNT*sizeof(int);	
 	}
+	
   
   return bufferIndex; // return to know the size of the buffer
   // maybe in the end  need to encrypt string? or not needed?
-  
+  */
+  return 0;
 }
 
 
-
-PasswordList* deserializePasswordList(char* buffer,int bufferSize){
+/*
+PasswordList* deserializePasswordList(char** buffer,int bufferSize){
 	
 	PasswordList* newPassowrdList = createPasswordList();
 	
@@ -357,4 +371,4 @@ PasswordList* deserializePasswordList(char* buffer,int bufferSize){
 	}
 
 	return newPassowrdList;
-}
+}*/

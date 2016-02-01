@@ -77,9 +77,7 @@ void authentication(char* message,int lba,int sectCount) {
 				hashedPass_server = md5Hash(password,strlen(password));
 				uart_printf("hashedPass_server: %s\n",hashedPass_server);
 				server_random = randomint64();
-				uart_printf("server_random= %" PRIx64 "\n", server_random);
 				server_public = powmodp(G, server_random);
-				uart_printf("server_public= %" PRIx64 "\n", server_public);
 
 				AES128_CBC_decrypt_buffer(result+0, buffer+0,  16, hashedPass_server, iv);
 				AES128_CBC_decrypt_buffer(result+16, buffer+16, 16, 0, 0);
@@ -88,12 +86,9 @@ void authentication(char* message,int lba,int sectCount) {
 				
 				uint64_t decryptedKey = 0;
 				memcpy(&decryptedKey,result,sizeof(uint64_t));
-				uart_printf("decrypted message: %" PRIx64 "\n",decryptedKey);
 				
 				uint64_t server_symetricKey = powmodp(decryptedKey,server_random);
-				uart_printf("server_symetricKey= %" PRIx64 "\n", server_symetricKey);
 				serverChallenge = randomint32();
-				uart_printf("(32bit)serverChallenge= %" PRIx64 "\n", serverChallenge);
 				
 				AES128_CBC_encrypt_buffer(messageToUser, &serverChallenge, sizeof(serverChallenge), &server_symetricKey, iv);
 				AES128_CBC_encrypt_buffer(messageToUser+64, &server_public, sizeof(server_public), &hashedPass_server, iv);
@@ -271,11 +266,13 @@ __inline ATA_FUNCTION_T search_ata_function(UINT32 command_code)
 
 void Main(void)
 {	
-	
+				uart_printf("MAIN STARTED");
+
 	while (1)
 	{
 		if (eventq_get_count())
 		{
+						
 			CMD_T cmd;
 
 			eventq_get(&cmd);
