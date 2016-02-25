@@ -28,5 +28,4 @@ sata_table.o: ../sata/sata_table.c ../include/jasmine.h ../include/nand.h \
  ../include/md5.h ../include/aes.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/include/stdint.h \
  c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/include/stdint-gcc.h \
- c:\program\ files\ (x86)\codesourcery\sourcery\ g++\ lite\bin\../lib/gcc/arm-none-eabi/4.5.1/../../../../arm-none-eabi/include/inttypes.h \
  ../include/sata.h ../include/sata_cmd.h

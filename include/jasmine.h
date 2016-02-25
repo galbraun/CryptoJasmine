@@ -187,9 +187,7 @@ typedef struct
 #include "uart.h"
 #endif
 
-//////////////////////////////
-/// shani and gal project ////
-/////////////////////////////
+/****************** GAL AND SHANI PROJECT ******************/
 //#include "gmp.h"
 
 #include "eke.h"
@@ -204,32 +202,33 @@ typedef struct
 //#define passwordBufferSizeAddress 0x10
 
 typedef enum {
-	INVALID_STATE,
-	GET_USER_KEY,
-	GET_USER_CHALLENGE,
-	SEND_SERVER_KEY_CHALLENGE,
-	SEND_TO_USER,
-	AUTHENTICATION_FINISHED,
-} authenticationState;
+	AUTH_INITIAL_STATE,
+	AUTH_GET_USER_KEY,
+	AUTH_GET_USER_CHALLENGE,
+	AUTH_SEND_SERVER_KEY_CHALLENGE,
+	AUTH_SEND_TO_USER,
+	AUTH_AUTHENTICATION_FINISHED,
+} EAuthenticationState;
 
 typedef enum {
 	MESSAGE_READY,
 	MESSAGE_INVALID_STATE
-} messageToUserStatus;
+} EMessageToUserState;
 
 typedef enum {
-	INITIAL_STATE,
-	NOT_AUTHENTICATED,
-	AUTHENTICATED,
-} systemState;
+	SYS_INITIAL_STATE, // to enable format and initial actions
+	SYS_NOT_AUTHENTICATED, 
+	SYS_AUTHENTICATED,
+} ESystemState;
 
-systemState systemAuthenticationState; // 3 stages : initial state so format and initial actions won't be blocked, not authencticated state and authencticated state
+//int commandCounter;
 
-int commandCounter;
+//ESystemState			currSystemState;
+//EAuthenticationState	currAuthenticationState; // after an authentication process began - sign in which step in the process 
+//EMessageToUserState	currMessageState;
 
-authenticationState currentState; // after an authentication process began - sign in which step in the process 
-
-////////////////////////////////
+/****************** GAL AND SHANI PROJECT ******************/
+/****************** END OF CURRENT CHANGE ******************/
 
 
 #endif	// JASMINE_H

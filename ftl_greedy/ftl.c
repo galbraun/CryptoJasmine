@@ -294,13 +294,11 @@ void ftl_open(void)
     SETREG(INTR_MASK, FIRQ_DATA_CORRUPT | FIRQ_BADBLK_L | FIRQ_BADBLK_H);
 	SETREG(FCONF_PAUSE, FIRQ_DATA_CORRUPT | FIRQ_BADBLK_L | FIRQ_BADBLK_H);
 		
-					uart_printf("AFTER FORMAT");
-
+	uart_printf("AFTER FORMAT");
 		
 	enable_irq();
 
-					uart_printf("AFTER ENABLE IRQ");
-
+	uart_printf("AFTER ENABLE IRQ 1BLA 2BLA 3BLA 4BLA 5BLA 6BLA 7BLA 8BLA 9BLA 1BLA");
 }
 
 void ftl_flush(void)
@@ -320,8 +318,8 @@ void ftl_test_write(UINT32 const lba, UINT32 const num_sectors)
 }
 void ftl_read(UINT32 const lba, UINT32 const num_sectors)
 {
-	static int i=0;
-	//uart_printf("reading something...counter is: %d , lba is: %d, num sectors is: %d\n",i++,lba,num_sectors);
+	// static int i=0;
+	// uart_printf("reading something...counter is: %d , lba is: %d, num sectors is: %d\n",i++,lba,num_sectors);
 	
     UINT32 remain_sects, num_sectors_to_read;
     UINT32 lpn, sect_offset;
@@ -381,8 +379,8 @@ void ftl_read(UINT32 const lba, UINT32 const num_sectors)
 }
 void ftl_write(UINT32 const lba, UINT32 const num_sectors)
 {
-	static int i=0;
-	//uart_printf("writing something...counter is: %d , lba is: %d, num sectors is: %d\n",i++,lba,num_sectors);
+	// static int i=0;
+	// uart_printf("writing something...counter is: %d , lba is: %d, num sectors is: %d\n",i++,lba,num_sectors);
     UINT32 remain_sects, num_sectors_to_write;
     UINT32 lpn, sect_offset;
 	

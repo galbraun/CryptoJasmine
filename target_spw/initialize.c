@@ -21,9 +21,7 @@
 
 void init_jasmine(void)
 {	
-
-				uart_printf("INIT STARTED");
-
+	uart_printf("INIT STARTED");
 
 	UINT32 i, bank;
 	extern UINT32 Image$$ER_ZI$$ZI$$Base;
@@ -134,8 +132,10 @@ void init_jasmine(void)
 	sata_reset();
 	#endif
 	
+	uart_printf("BEFORE FTL_OPEN");
     ftl_open();
-	
+	uart_printf("AFTER FTL_OPEN");
+
 	#if OPTION_FTL_TEST == TRUE
 	extern void ftl_test(void);
 	ftl_test();
@@ -144,5 +144,4 @@ void init_jasmine(void)
     #endif
 
 	uart_printf("INIT FINISHED");
-
 }
