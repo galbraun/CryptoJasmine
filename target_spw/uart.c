@@ -197,14 +197,14 @@ int uart_get_line(char * msg)
 
 void uart_printf(const char * msg, ...)
 {	
- char out[512];
+ char out[512] = {0};
  size_t size = 512;
  int n = 0; 
  va_list ap;
   va_start(ap, msg);
   n = vsnprintf(out, size-1, msg, ap);
   va_end(ap);
-  out[size-1]='/0';
+  out[size-1] = 0;
   uart_print(out);
 }
 

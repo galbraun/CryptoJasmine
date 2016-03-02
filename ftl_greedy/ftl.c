@@ -290,15 +290,11 @@ void ftl_open(void)
 
     // This example FTL can handle runtime bad block interrupts and read fail (uncorrectable bit errors) interrupts
     flash_clear_irq();
-	
+
     SETREG(INTR_MASK, FIRQ_DATA_CORRUPT | FIRQ_BADBLK_L | FIRQ_BADBLK_H);
 	SETREG(FCONF_PAUSE, FIRQ_DATA_CORRUPT | FIRQ_BADBLK_L | FIRQ_BADBLK_H);
-		
-	uart_printf("AFTER FORMAT");
-		
-	enable_irq();
 
-	uart_printf("AFTER ENABLE IRQ 1BLA 2BLA 3BLA 4BLA 5BLA 6BLA 7BLA 8BLA 9BLA 1BLA");
+	enable_irq();
 }
 
 void ftl_flush(void)
@@ -355,7 +351,7 @@ void ftl_read(UINT32 const lba, UINT32 const num_sectors)
         else
         {
 			UINT32 next_read_buf_id = (g_ftl_read_buf_id + 1) % NUM_RD_BUFFERS;
-			
+
 			#if OPTION_FTL_TEST == 0
 			while (next_read_buf_id == GETREG(SATA_RBUF_PTR));	// wait if the read buffer is full (slow host)
 			#endif
@@ -364,12 +360,14 @@ void ftl_read(UINT32 const lba, UINT32 const num_sectors)
             // Send 0xFF...FF to host when the host request to read the sector that has never been written.
             // In old version, for example, if the host request to read unwritten sector 0 after programming in sector 1, Jasmine would send 0x00...00 to host.
             // However, if the host already wrote to sector 1, Jasmine would send 0xFF...FF to host when host request to read sector 0. (ftl_read() in ftl_xxx/ftl.c)
-			
 			mem_set_dram(RD_BUF_PTR(g_ftl_read_buf_id) + sect_offset*BYTES_PER_SECTOR,
                          0xFFFFFFFF, num_sectors_to_read*BYTES_PER_SECTOR);
+
             flash_finish();
+
 			SETREG(BM_STACK_RDSET, next_read_buf_id);	// change bm_read_limit
 			SETREG(BM_STACK_RESET, 0x02);				// change bm_read_limit
+
 			g_ftl_read_buf_id = next_read_buf_id;
         }
         sect_offset   = 0;

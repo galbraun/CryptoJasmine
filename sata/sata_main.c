@@ -28,202 +28,19 @@ volatile UINT32		g_sata_action_flags;
 
 
 /****************** GAL AND SHANI PROJECT ******************/
-char messageToUser[128] = {0};
+const int MAX_AES_SIZE = 64;
+const int MAX_MSG_SIZE = 128;
+char msgToUser[128] = {0};
 int  commandCounter = 0;
 
-ESystemState			currSystemState = SYS_INITIAL_STATE;
-EAuthenticationState	currAuthenticationState = AUTH_INITIAL_STATE; // after an authentication process began - sign in which step in the process 
-EMessageToUserState		currMessageState = MESSAGE_INVALID_STATE;
+ESystemState		 currSysState  = SYS_INITIAL_STATE;
+EAuthenticationState currAuthState = AUTH_INITIAL_STATE; // after an authentication process began - sign in which step in the process 
+EMsgToUserState		 currMsgState  = MSG_INVALID_STATE;
 
 #define get_num_bank(lpn)             ((lpn) % NUM_BANKS)
 #define get_lpn(bank, page_num)       (g_misc_meta[bank].lpn_list_of_cur_vblock[page_num])
 #define CHECK_LPAGE(lpn)              ASSERT((lpn) < NUM_LPAGES)
 
-
-
-
-
-
-void authentication(char* message, int lba, int sectCount) {
-	 
-	uint8_t iv[]		= {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
-	uint8_t buffer[64]	= {0};
-	uint8_t result[64]	= {0};
-	uint8_t input[64]	= {0};
-	 
-	char* password = "testtest"; // TODO: this is for test - need to pull from passwordfile by userName
-	char* userName = NULL;
-	char* userData = NULL;
-	char* hashedPass_server = NULL;
-	static uint32_t serverChallengeAck = 0;
-	static uint32_t serverChallenge	= 0;
-	static uint32_t userChallenge	= 0;
-	static uint64_t server_public	= 0;
-	static uint64_t server_random	= 0;
-	int i = 0;
-
-	uart_printf("P is %llu\n", P);
-	 
-	UINT32 sect_offset = lba % SECTORS_PER_PAGE;
-	UINT32 next_read_buf_id;
-	 
-	switch (currAuthenticationState) {
-		case AUTH_GET_USER_KEY: // server side: find user password decrypt it from the password file 
-			userName = message;
-			userData = strchr(message,'|') + 1;
-				
-			*(strchr(message,'|')) = 0; //null terminated string
-				
-			strncpy((char*)buffer, userData, strlen(userData)); // TODO: is userData is null terminated? is message is null terminated?
-				
-			uart_printf("user name is: %s",userName);
-			uart_printf("user data is: %s",userData);
-				
-			hashedPass_server = md5Hash(password, strlen(password));
-			uart_printf("hashedPass_server: %s\n",hashedPass_server);
-
-			server_random = randomint64();
-			server_public = powmodp(G, server_random);
-
-			AES128_CBC_decrypt_buffer(result + 0,  buffer+0,  16, (uint8_t*)hashedPass_server, iv);
-			AES128_CBC_decrypt_buffer(result + 16, buffer+16, 16, 0, 0);
-			AES128_CBC_decrypt_buffer(result + 32, buffer+32, 16, 0, 0);
-			AES128_CBC_decrypt_buffer(result + 48, buffer+48, 16, 0, 0);
-				
-			uint64_t decryptedKey = 0;
-			memcpy(&decryptedKey, result, sizeof(uint64_t));
-				
-			uint64_t server_symetricKey = powmodp(decryptedKey, server_random);
-			serverChallenge = randomint32();
-				
-			AES128_CBC_encrypt_buffer((uint8_t*)messageToUser, &serverChallenge, sizeof(serverChallenge), &server_symetricKey, iv);
-			AES128_CBC_encrypt_buffer(messageToUser+64, &server_public, sizeof(server_public), &hashedPass_server, iv);
-			currMessageState = MESSAGE_READY;
-				
-			// sends to user the server challenge encrypted with server_symetricKey and server_public encrypted with hashedPass_server
-			free(hashedPass_server); //allocated by md5Hash 
-
-			break;
-
-		case AUTH_GET_USER_CHALLENGE:	
-			serverChallengeAck = message;
-			userChallenge = strchr(message,'|') + 1; // TODO: get 64 bit, split to 32 msb's user challenge and 32lsb's server challenge ack
-			
-			*(strchr(message,'|')) = 0;
-			
-			strncpy(buffer, serverChallengeAck,strlen(serverChallengeAck));
-			
-			AES128_CBC_decrypt_buffer(result + 0,  buffer+0,  16, server_symetricKey, iv);
-			AES128_CBC_decrypt_buffer(result + 16, buffer+16, 16, 0, 0);
-			AES128_CBC_decrypt_buffer(result + 32, buffer+32, 16, 0, 0);
-			AES128_CBC_decrypt_buffer(result + 48, buffer+48, 16, 0, 0);
-			
-			// TODO: do manipulation on challenge ( xor with symetric key?)
-			
-			if ( serverChallengeAck != serverChallenge ){
-				//notAuthenticated(lba);
-				uart_printf("challenges not equal... problem!");
-				break;
-			}
-			
-			strncpy(buffer, userChallenge, strlen(userChallenge));
-			
-			AES128_CBC_decrypt_buffer(result + 0,  buffer+0,  16, server_symetricKey, iv);
-			AES128_CBC_decrypt_buffer(result + 16, buffer+16, 16, 0, 0);
-			AES128_CBC_decrypt_buffer(result + 32, buffer+32, 16, 0, 0);
-			AES128_CBC_decrypt_buffer(result + 48, buffer+48, 16, 0, 0);
-			
-			// TODO: do some manipulation of userChallenge (xor with symetric key? ) and send it to user
-
-			AES128_CBC_encrypt_buffer(messageToUser, &serverChallenge, sizeof(serverChallenge), &server_symetricKey, iv); // TODO: encrypt user manipulated challenge ack
-			currMessageState = MESSAGE_READY;
-			
-		case AUTH_SEND_TO_USER:
-			next_read_buf_id = (g_ftl_read_buf_id + 1) % NUM_RD_BUFFERS;
-				
-			while (next_read_buf_id == GETREG(SATA_RBUF_PTR));
-				
-			if(currMessageState != MESSAGE_READY){
-				uart_printf("massage is not ready... problem!");
-				break;
-			}
-			
-			for (int k = 0; k < strlen(messageToUser); k++){
-				write_dram_8(RD_BUF_PTR(g_ftl_read_buf_id) + (36*BYTES_PER_SECTOR) + k, messageToUser[k]);
-			}
-
-			SETREG(SATA_RBUF_PTR, g_ftl_read_buf_id);	// change sata_read_ptr
-			SETREG(BM_STACK_RDSET, next_read_buf_id);	// change bm_read_limit
-			SETREG(BM_STACK_RESET, 0x02);				// change bm_read_limit
-				
-			g_ftl_read_buf_id = next_read_buf_id;
-			
-			currMessageState = MESSAGE_INVALID_STATE;
-			break; 
-
-		
-		default:
-			break;
-	}	
-}
-
-static int autherization(char* user, char* password,UINT32 bank){
-	int status = 0;
-/*
-	if (user == NULL || password == NULL){
-		return 0;
-	}
-	
-	FILE* fd = fopen(PASSWORD_FILE,"r"); // not realy work - need to choose place in hdd
-	if (!fd){
-		//also check here if place in hdd not valid 
-		return 0;
-	}
-	do {
-		
-	} while (status != EOF);
-	
-	fclose(fd);
-*/
-	return status;
-} 
-
-void notAuthenticated(int lba){ // TODO: every user action will be write-read, so this function should only change the messageToUser content
-	uart_printf("not authenticated...problem!");
-	UINT32 sect_offset  = lba % SECTORS_PER_PAGE;
-	strcpy(messageToUser,"NOT AUTHENTICATED!");
-	
-	UINT32 next_read_buf_id = (g_ftl_read_buf_id + 1) % NUM_RD_BUFFERS;
-	
-	while (next_read_buf_id == GETREG(SATA_RBUF_PTR));
-	
-	for ( int k=0 ; k< strlen(messageToUser); k++){
-		write_dram_8(RD_BUF_PTR(g_ftl_read_buf_id)+(36*BYTES_PER_SECTOR)+k,messageToUser[k]);
-	}
-				
-	SETREG(SATA_RBUF_PTR, g_ftl_read_buf_id);	// change sata_read_ptr
-	SETREG(BM_STACK_RDSET, next_read_buf_id);	// change bm_read_limit
-	SETREG(BM_STACK_RESET, 0x02);				// change bm_read_limit
-	/*
-	UINT32 status = (B_DRDY|BIT4|B_ERR);
-	UINT32 err_code = B_AUTH;
-	UINT32 fis_type = FISTYPE_REGISTER_D2H;
-	UINT32 flags = B_IRQ;
-	SETREG(SATA_FIS_D2H_0, fis_type | (flags << 8) | (status << 16) | (err_code << 24));
-	SETREG(SATA_FIS_D2H_1, GETREG(SATA_FIS_H2D_1));
-	SETREG(SATA_FIS_D2H_2, GETREG(SATA_FIS_H2D_2) & 0x00FFFFFF);
-	SETREG(SATA_FIS_D2H_3, GETREG(SATA_FIS_H2D_3) & 0x0000FFFF);
-	SETREG(SATA_FIS_D2H_4, 0);
-	SETREG(SATA_FIS_D2H_LEN, 5);
-	SETREG(SATA_INT_STAT,OPERATION_ERR);
-	SETREG(APB_INT_STS, INTR_SATA);
-	SETREG(SATA_CTRL_2,PIO_READ | COMPLETE);
-	*/
-	
-	g_ftl_read_buf_id = next_read_buf_id;
-	
-	uart_printf("%d %d %d %d %d\n",GETREG(SATA_PHY_STATUS),GETREG(SATA_FIS_D2H_0),GETREG(SATA_FIS_D2H_1),GETREG(SATA_FIS_D2H_2),GETREG(SATA_FIS_D2H_3),GETREG(SATA_FIS_D2H_4));
-}
 /****************** GAL AND SHANI PROJECT ******************/
 /****************** END OF CURRENT CHANGE ******************/
 
@@ -282,132 +99,177 @@ __inline ATA_FUNCTION_T search_ata_function(UINT32 command_code)
 }
 
 
-void Main(void)
-{	
-	uart_printf("MAIN STARTED"); /*** GAL AND SHANI PROJECT ***/
+/****************** GAL AND SHANI PROJECT ******************/
 
+// Get data form RAM
+void getData(int lba, char* msg, int msgMaxSize)
+{
+	UINT32 sect_offset  = lba % SECTORS_PER_PAGE;
+	int i = 0;
+	for (i = 0; i < BYTES_PER_SECTOR; i++) {
+		char ch = (char) read_dram_8(WR_BUF_PTR(g_ftl_write_buf_id) + (sect_offset*BYTES_PER_SECTOR) + i);
+		if (ch == 0) {
+			break;
+		}
+		msg[i] = ch;
+	}
+	msg[i+1] = '\0';		
+	g_ftl_write_buf_id = (g_ftl_write_buf_id + 1) % NUM_WR_BUFFERS;
+	uart_printf("** msg from user is: %s", msg);
+	//UINT32 sect_offset  = lba % SECTORS_PER_PAGE;
+	//msg[0] = (char) read_dram_8 (WR_BUF_PTR(g_ftl_write_buf_id) + (sect_offset*BYTES_PER_SECTOR));
+	
+	//for (int i = 1; (i < BYTES_PER_SECTOR) && (msg[i-1] != 0); i++) {
+	//	msg[i] = (char) read_dram_8 (WR_BUF_PTR(g_ftl_write_buf_id) + (sect_offset*BYTES_PER_SECTOR) + i);
+	//}
+	
+	//msg[msgMaxSize-1] = 0; //msg should be null terminated
+}
+
+// Send data to RAM
+void sendData(char* msg, int msgSize)
+{
+	UINT32 next_read_buf_id = (g_ftl_read_buf_id + 1) % NUM_RD_BUFFERS;
+				
+	while (next_read_buf_id == GETREG(SATA_RBUF_PTR));
+	
+	for (int k = 0; k < msgSize; k++){
+		write_dram_8(RD_BUF_PTR(g_ftl_read_buf_id) + (36 * BYTES_PER_SECTOR) + k, msg[k]);
+	}
+
+	SETREG(SATA_RBUF_PTR, g_ftl_read_buf_id);	// change sata_read_ptr
+	SETREG(BM_STACK_RDSET, next_read_buf_id);	// change bm_read_limit
+	SETREG(BM_STACK_RESET, 0x02);				// change bm_read_limit
+		
+	g_ftl_read_buf_id = next_read_buf_id;
+}
+
+void decryptBuffer(uint8_t* result, uint8_t* input, uint32_t length, const uint8_t* key, const uint8_t* iv)
+{	
+	if(length ==  MAX_AES_SIZE){
+		AES128_CBC_decrypt_buffer(result + 0,  input+0,  16, key, iv);
+		AES128_CBC_decrypt_buffer(result + 16, input+16, 16, 0, 0);
+		AES128_CBC_decrypt_buffer(result + 32, input+32, 16, 0, 0);
+		AES128_CBC_decrypt_buffer(result + 48, input+48, 16, 0, 0);
+	}
+}
+
+void authentication(CMD_T cmd){
+	switch(currAuthState)
+	{
+	case AUTH_INITIAL_STATE: //expect to receive user pablic key
+		if(cmd.cmd_type == READ){
+			//send to user: not authenticated
+		}
+		if(cmd.cmd_type == WRITE && cmd.lba == 100) {
+			//get user key and do actions
+			currAuthState = AUTH_GOT_USER_KEY;			
+		}
+		break;
+		
+	case AUTH_GOT_USER_KEY: //expect to send server key and challenge
+		if(cmd.cmd_type == READ && cmd.lba == 96) {
+			//send server key and challenge
+			currAuthState = AUTH_SERVER_KEY_CHALLANGE_WAS_SENT;			
+		}
+		if(cmd.cmd_type == WRITE){
+			// TODO: print error
+			currAuthState = AUTH_INITIAL_STATE;
+		}
+		break;
+		
+	case AUTH_SERVER_KEY_CHALLANGE_WAS_SENT: //expect to receive server challenge ake and user challenge
+		if(cmd.cmd_type == READ){
+			//send to user: not authenticated
+			currAuthState = AUTH_INITIAL_STATE;
+		}
+		if(cmd.cmd_type == WRITE && cmd.lba == 100) {
+			//get server challenge ake and user challenge
+			currAuthState = AUTH_GOT_USER_CHALLENGE;			
+		}
+		break;
+		
+	case AUTH_GOT_USER_CHALLENGE: //expect to send user challenge ack
+		if(cmd.cmd_type == READ && cmd.lba == 96) {
+			//send user challenge ack
+			currAuthState = AUTH_AUTHENTICATION_FINISHED;
+			currSysState  = SYS_AUTHENTICATED;		
+		}
+		if(cmd.cmd_type == WRITE){
+			// TODO: print error
+			currAuthState = AUTH_INITIAL_STATE;
+		}
+		break;
+	}
+}
+/****************** GAL AND SHANI PROJECT ******************/
+/****************** END OF CURRENT CHANGE ******************/
+
+void Main(void)
+{
 	while (1)
 	{
 		if (eventq_get_count())
-		{	
+		{
 			CMD_T cmd;
 			eventq_get(&cmd);
 			
-			/*** GAL AND SHANI PROJECT ***/
+			currSysState = (commandCounter++ < 5000 ? SYS_INITIAL_STATE : SYS_NOT_AUTHENTICATED);
+		
+			//#TODO: change currSystemState 
 			
-			// systemAuthenticationState is in SYS_INITIAL_STATE so the basic format actions won't be block
-			// after 5000 commands, changed to SYS_NOT_AUTHENTICATED
-			// TODO: change it to timer with 30 secs timout? 
-			if (commandCounter < 5000) {
-				commandCounter++;
-			} 
-			else {
-				currSystemState = SYS_NOT_AUTHENTICATED;
-			}
-			
-			
-			if(currSystemState == SYS_INITIAL_STATE){
+			if(currSysState == SYS_AUTHENTICATED){
 				if (cmd.cmd_type == READ) {
+					// TODO: check autherization
 					ftl_read(cmd.lba, cmd.sector_count);
 				}
 				else {
+					// TODO: check autherization
 					ftl_write(cmd.lba, cmd.sector_count);
 				}
 			}
-			else { //check authentication and autherization
-				if(currSystemState == SYS_AUTHENTICATED){
+			else {
+				authentication(cmd);
+				if(currSysState == SYS_INITIAL_STATE){
 					if (cmd.cmd_type == READ) {
-						// TODO: check autherization
 						ftl_read(cmd.lba, cmd.sector_count);
 					}
 					else {
-						// TODO: check autherization
 						ftl_write(cmd.lba, cmd.sector_count);
 					}
 				}
-				else if (cmd.cmd_type == WRITE && cmd.lba == 100 ) { 
-				//currSystemState == SYS_NOT_AUTHENTICATED, action is part of authentication process: writing data to Jasmine (send user response / user authentication data)
-					UINT32 sect_offset  = cmd.lba % SECTORS_PER_PAGE;
-					char message[BYTES_PER_SECTOR] = {0};
-					int i = 0;
-					for (i = 0; i < BYTES_PER_SECTOR; i++) {
-						char ch = (char) read_dram_8(WR_BUF_PTR(g_ftl_write_buf_id) + (sect_offset*BYTES_PER_SECTOR) + i);
-						if (ch == 0) {
-							break;
-						}
-						message[i] = ch;
-					}
-					message[i+1] = '\0';		
-
-					uart_printf("message fetched from user is - %s", message);
-					
-					switch (currAuthenticationState){
-					case AUTH_INITIAL_STATE: //message is user authentication data
-						currAuthenticationState = AUTH_GET_USER_KEY;
-						authentication(message, cmd.lba, cmd.sector_count);
-						break;
-					//case AUTH_GET_USER_CHALLENGE: //message is user challenge (and response to server challenge)
-					case AUTH_SEND_TO_USER: //message is user challenge (and response to server challenge)
-						currAuthenticationState = AUTH_GET_USER_CHALLENGE;
-						authentication(message, cmd.lba, cmd.sector_count);
-						break;
-					default:
-						uart_printf("cmd.cmd_type == WRITE && cmd.lba == 100 , currAuthenticationState is - %d", currAuthenticationState);
-					}
-					
-					continue;
-					
-				}
-				else if (cmd.cmd_type == READ && cmd.lba == 96 ) {
-				//currSystemState == SYS_NOT_AUTHENTICATED, action is part of authentication process: reading data from Jasmine (get Jasmin response)
-					uart_printf("message is : %s", messageToUser);
-					uart_printf("currAuthenticationState is - %d", currAuthenticationState);
-					
-					char message[BYTES_PER_SECTOR] = {0};
-					switch (currAuthenticationState){
-					case AUTH_GET_USER_KEY:
-						currAuthenticationState = AUTH_SEND_TO_USER;
-						authentication(message, cmd.lba, cmd.sector_count);
-						break;
-					case AUTH_GET_USER_CHALLENGE: //message is user challenge (and response to server challenge)
-						currAuthenticationState = AUTH_SEND_TO_USER;
-						authentication(message, cmd.lba, cmd.sector_count);
-						
-						currAuthenticationState = AUTH_AUTHENTICATION_FINISHED;
-						currSystemState = SYS_AUTHENTICATED;
-						break;
-					default:
-						uart_printf("cmd.cmd_type == READ && cmd.lba == 96 , currAuthenticationState is - %d", currAuthenticationState);
-					}
-					
-					// if (currAuthenticationState == AUTH_GET_USER_KEY){
-						// currAuthenticationState = AUTH_SEND_TO_USER;
-						// authentication(message,cmd.lba,cmd.sector_count);
-						// currAuthenticationState = AUTH_GET_USER_CHALLENGE;
-					// } 
-					// else {
-						// currAuthenticationState = AUTH_SEND_TO_USER;
-						// authentication(message,cmd.lba,cmd.sector_count);
-						// currAuthenticationState = AUTHENTICATION_FINISHED;
-						// currSystemState = AUTHENTICATED;
-						//user verify server and then authentication finish
-					// }
-					
-					continue;
-				}
-				else { 
-				//currSystemState == SYS_NOT_AUTHENTICATED, and the action is not part of authentication process
-					// notAuthenticated(cmd.lba);	
-					// continue;
-				}
-						
-				//TODO: add timeout to Authentication after 5 minutes?
-				//		change currSystemState to SYS_NOT_AUTHENTICATED and currAuthenticationState to AUTH_INITIAL_STATE
 			}
-			/*** GAL AND SHANI PROJECT ***/
-			/*** END OF CURRENT CHANGE ***/			
+			/*
+			
+			
+			
+			if (cmd.cmd_type == READ)
+			{
+				if(cmd.cmd_type == READ && cmd.lba == 96){
+					char msg[128] = "hi hi shani";
+					sendData(msg, strlen(msg)+1);
+					uart_printf("massage to user: %s", msg);
+				}
+				else{
+					ftl_read(cmd.lba, cmd.sector_count);
+				}
+			}
+			else
+			{
+				if(cmd.cmd_type == WRITE && cmd.lba == 100){
+					char msg[BYTES_PER_SECTOR] = {0};
+					getData(cmd.lba, msg, BYTES_PER_SECTOR);
+					uart_printf("massage from user: %s", msg);
+				}
+				else{
+					ftl_write(cmd.lba, cmd.sector_count);
+				}
+			}
+			*/
+			
 		}
-		else if (g_sata_context.slow_cmd.status == SLOW_CMD_STATUS_PENDING) {
+		else if (g_sata_context.slow_cmd.status == SLOW_CMD_STATUS_PENDING)
+		{
 			void (*ata_function)(UINT32 lba, UINT32 sector_count);
 
 			slow_cmd_t* slow_cmd = &g_sata_context.slow_cmd;
@@ -418,7 +280,8 @@ void Main(void)
 
 			slow_cmd->status = SLOW_CMD_STATUS_NONE;
 		}
-		else {
+		else
+		{
 			// idle time operations
 		}
 	}

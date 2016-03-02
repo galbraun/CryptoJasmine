@@ -202,23 +202,23 @@ typedef struct
 //#define passwordBufferSizeAddress 0x10
 
 typedef enum {
-	AUTH_INITIAL_STATE,
-	AUTH_GET_USER_KEY,
-	AUTH_GET_USER_CHALLENGE,
-	AUTH_SEND_SERVER_KEY_CHALLENGE,
-	AUTH_SEND_TO_USER,
+	AUTH_INITIAL_STATE, 				//expect to receive user pablic key
+	AUTH_GOT_USER_KEY, 					//expect to send server key and challenge
+	AUTH_SERVER_KEY_CHALLANGE_WAS_SENT, //expect to receive server challenge ake and user challenge
+	AUTH_GOT_USER_CHALLENGE, 			//expect to send user challenge ack
 	AUTH_AUTHENTICATION_FINISHED,
+	AUTH_INVALID_STATE
 } EAuthenticationState;
 
 typedef enum {
-	MESSAGE_READY,
-	MESSAGE_INVALID_STATE
-} EMessageToUserState;
+	MSG_READY,
+	MSG_INVALID_STATE
+} EMsgToUserState;
 
 typedef enum {
 	SYS_INITIAL_STATE, // to enable format and initial actions
 	SYS_NOT_AUTHENTICATED, 
-	SYS_AUTHENTICATED,
+	SYS_AUTHENTICATED
 } ESystemState;
 
 //int commandCounter;
