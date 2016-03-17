@@ -1,11 +1,11 @@
 
 #include "eke.h"
 
-char * md5Hash(const char *str, int length) {
+unsigned char * md5Hash(const char *str, int length) {
     int n;
     MD5_CTX c;
     unsigned char digest[16];
-    char *out = (char*)malloc(33);
+    unsigned char *out = (unsigned char*)malloc(33);
 
     MD5_Init(&c);
 
