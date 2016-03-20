@@ -221,6 +221,11 @@ typedef enum {
 	SYS_AUTHENTICATED
 } ESystemState;
 
+typedef enum {
+	AUTH_READ,
+	AUTH_WRITE
+} EAuthorizationAction;
+
 //int commandCounter;
 
 //ESystemState			currSystemState;

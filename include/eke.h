@@ -13,7 +13,7 @@
 #include "md5.h"
 #include "aes.h"
 
-char * md5Hash(const char *str, int length);
+unsigned char * md5Hash(const char *str, int length);
 
 // calc a * b % p , avoid 64bit overflow
 static inline uint64_t mul_mod_p(uint64_t a, uint64_t b);
