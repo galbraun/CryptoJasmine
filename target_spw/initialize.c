@@ -132,9 +132,9 @@ void init_jasmine(void)
 	sata_reset();
 	#endif
 	
-	uart_printf("BEFORE FTL_OPEN");
+	//uart_printf("BEFORE FTL_OPEN");
     ftl_open();
-	uart_printf("AFTER FTL_OPEN");
+	//uart_printf("AFTER FTL_OPEN");
 
 	#if OPTION_FTL_TEST == TRUE
 	extern void ftl_test(void);

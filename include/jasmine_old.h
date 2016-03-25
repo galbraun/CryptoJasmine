@@ -198,34 +198,28 @@ typedef struct
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_USER_NAME 6
-#define MAX_PASSWORD 5
-#define MAX_NUM_USERS 3
+//#define passwordBufferAddress 0x20
+//#define passwordBufferSizeAddress 0x10
 
 typedef enum {
-	AUTH_INITIAL_STATE, 				//expect to receive user pablic key
-	AUTH_GOT_USER_KEY, 					//expect to send server key and challenge
-	AUTH_SERVER_KEY_CHALLANGE_WAS_SENT, //expect to receive server challenge ake and user challenge
-	AUTH_GOT_USER_CHALLENGE, 			//expect to send user challenge ack
-	AUTH_AUTHENTICATION_FINISHED,
-	AUTH_INVALID_STATE
+	AUTH_INITIAL_STATE,
+	AUTH_GET_USER_KEY,
+	AUTH_GET_USER_CHALLENGE,
+	AUTH_SEND_SERVER_KEY_CHALLENGE,
+	AUTH_SEND_TO_USER,
+	AUTH_AUTHENTICATION_FINISHED
 } EAuthenticationState;
 
 typedef enum {
-	MSG_READY,
-	MSG_INVALID_STATE
-} EMsgToUserState;
+	MESSAGE_READY,
+	MESSAGE_INVALID_STATE
+} EMessageToUserState;
 
 typedef enum {
 	SYS_INITIAL_STATE, // to enable format and initial actions
 	SYS_NOT_AUTHENTICATED, 
 	SYS_AUTHENTICATED
 } ESystemState;
-
-typedef enum {
-	AUTH_READ,
-	AUTH_WRITE
-} EAuthorizationAction;
 
 //int commandCounter;
 
