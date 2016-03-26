@@ -14,6 +14,8 @@
 
 #define SECT_SIZE 512
 
+bool printDebug = false;
+
 void decryptBuffer(uint8_t* result, const uint8_t* data, const uint8_t* key)
 {	
 	uint8_t iv[] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
@@ -89,10 +91,10 @@ void authentication(){
 
 	// 1 - write userName, user public key
 	if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+		printf("OpenSSD didn't opened correctly\n");
 		perror("open (write) error on file /dev/sdb");
 		exit(-1);
-	}
-	printf("OpenSSD opened correctly\n");
+	} 
 
 	int userNameSize = strlen(userName);
 	
@@ -100,18 +102,18 @@ void authentication(){
 	msg[userNameSize] = '|';
 
 	hashedPass_user = (uint8_t*) md5Hash(password, strlen(password));	// hash user password	
-	printf("hashedPass_user: %s\n", hashedPass_user);
+	if (printDebug) printf("hashedPass_user: %s\n", hashedPass_user);
 	user_random = randomint64(); 
 	user_public = powmodp(G, user_random); // create user public key
 	//user_public = 0;
-	printf("user_public: %016lx\n", user_public);
+	if (printDebug) printf("user_public: %016lx\n", user_public);
 
 	memset(tmpInput, 0, sizeof(tmpInput));
 	memcpy(tmpInput, &user_public, sizeof(user_public));
 	encryptBuffer(msg+userNameSize+1, tmpInput, sizeof(tmpInput), hashedPass_user);// encrypt user public key with user pass
 
 	testCnt = pwrite(fd, msg, sizeof(msg), w_pos); // send to server user name + encrypted user public key
-	printf("testCnt is: %d, w_pos is %ld\n", testCnt, w_pos);
+	if (printDebug) printf("testCnt is: %d, w_pos is %ld\n", testCnt, w_pos);
 
 	f = fdopen(fd, "w");
 	fflush(f);
@@ -134,15 +136,15 @@ void authentication(){
 
 	close(fd);
 
-	printf("\nend 1 - sleeping\n");
+	if (printDebug) printf("\nend 1 - sleeping\n");
 	sleep(3);		
 
 	// 2 - read server challenge and server public	
 	if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+		printf("OpenSSD didn't opened correctly\n");
 		perror("open (write) error on file /dev/sdb");
 		exit(-1);
-	}
-	printf("OpenSSD opened correctly\n");
+	} 
 
 	for(int i = 0; i < nSectors * SECT_SIZE; i++) 
 		readbuffer[i] = 0;
@@ -158,10 +160,10 @@ void authentication(){
 	uint64_t server_public = 0;
 	memcpy(&server_public, result, sizeof(server_public));
 	
-	printf("server public is: %016lx\n", server_public);
+	if (printDebug) printf("server public is: %016lx\n", server_public);
 				
 	user_symetricKey = powmodp(server_public, user_random);
-	printf("user_symetricKey: %016lx\n", user_symetricKey);
+	if (printDebug) printf("user_symetricKey: %016lx\n", user_symetricKey);
 	
 	uint8_t tmpSymetric[64] = {0};
 	memset(result,0,sizeof(result));
@@ -171,7 +173,7 @@ void authentication(){
 	server_Challenge=0;
 	memcpy(&server_Challenge, result, sizeof(server_Challenge));
 	
-	printf("server challenge is: %016lx\n", server_Challenge);
+	if (printDebug) printf("server challenge is: %016lx\n", server_Challenge);
 	
 	free(hashedPass_user); //allocated by md5Hash 
 	
@@ -179,15 +181,15 @@ void authentication(){
 
 	close(fd);
 
-	printf("\nend 2 - sleeping\n");
+	if (printDebug) printf("\nend 2 - sleeping\n");
 	sleep(3);	
 		
 	//3 - write server challenge ake and user challenge
 	if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+		printf("OpenSSD didn't opened correctly\n");
 		perror("open (write) error on file /dev/sdb");
 		exit(-1);
-	}
-	printf("OpenSSD opened correctly\n");
+	} 
 
 	memset(msg,0,sizeof(msg));
 	memset(tmpInput,0,sizeof(tmpInput));
@@ -212,27 +214,27 @@ void authentication(){
 	memset(result, 0, sizeof(result));
 	decryptBuffer(result, msg+64, tmpKey);
 	memcpy(&dec_server_Challenge, result, sizeof(dec_server_Challenge));
-	printf("dec_user_Challenge is: %016lx\n", dec_server_Challenge);
+	if (printDebug) printf("dec_user_Challenge is: %016lx\n", dec_server_Challenge);
 	//**
 
 	testCnt = pwrite(fd, msg, sizeof(msg), w_pos); // send to server user name + encrypted user public key
-	printf("testCnt is: %d, w_pos is %ld\n", testCnt, w_pos);
+	if (printDebug) printf("testCnt is: %d, w_pos is %ld\n", testCnt, w_pos);
 
 	f = fdopen(fd, "w");
 	fflush(f);
 
 	close(fd);
 
-	printf("\nend 3 - sleeping\n");
+	if (printDebug) printf("\nend 3 - sleeping\n");
 	sleep(3);
 
 	//4 - read user challenge ake
 	//printf("dec_server_Challenge is: %016lx\n", dec_server_Challenge);			
 	if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+		printf("OpenSSD didn't opened correctly\n");
 		perror("open (write) error on file /dev/sdb");
 		exit(-1);
-	}
-	printf("OpenSSD opened correctly\n");
+	} 
 
 	for(int i = 0; i < nSectors * SECT_SIZE; i++) 
 		readbuffer[i] = 0;
@@ -245,8 +247,8 @@ void authentication(){
 	decryptBuffer(result, dataPart1, tmpKey);
 	memcpy(&user_ChallengeAck, result, sizeof(user_ChallengeAck));
 	
-	printf("user challenge: %016lx\n", user_Challenge);
-	printf("user challenge ake: %016lx\n", user_ChallengeAck);
+	if (printDebug) printf("user challenge: %016lx\n", user_Challenge);
+	if (printDebug) printf("user challenge ake: %016lx\n", user_ChallengeAck);
 
 	if ( user_Challenge != user_ChallengeAck ){
 		printf("\nAUTHENTICATION FAILED!!!\n");
@@ -268,9 +270,15 @@ int main(){
 	int 	byteCnt = 1;	
 	uint8_t readbuffer[nSectors * SECT_SIZE];
 
+	char c = 0;
+	printf("Print debug messages? [y/n] ");
+	scanf("%c",&c);
+	printDebug = c=='y' ? true : false;
+
 	int choice = 0;
 	printMenu();
 	scanf("%d", &choice);
+
 	while(choice != 0) 
 	{
 
@@ -285,10 +293,10 @@ int main(){
 		case 2:
 		{
 			if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+				printf("OpenSSD didn't opened correctly\n");
 				perror("open (write) error on file /dev/sdb");
 				exit(-1);
-			}
-			printf("OpenSSD opened correctly\n");
+			} 
 
 			int64_t user_read_lba;
 			
@@ -304,11 +312,10 @@ int main(){
 
 			close(fd);
 			if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+				printf("OpenSSD didn't opened correctly\n");
 				perror("open (write) error on file /dev/sdb");
 				exit(-1);
-			}
-			printf("OpenSSD opened correctly\n");
-
+			} 
 
 			char responseBuffer[nSectors * SECT_SIZE];
 			for(int i = 0; i < nSectors * SECT_SIZE; i++) 
@@ -334,10 +341,10 @@ int main(){
 		{
 
 			if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+				printf("OpenSSD didn't opened correctly\n");
 				perror("open (write) error on file /dev/sdb");
 				exit(-1);
-			}
-			printf("OpenSSD opened correctly\n");
+			} 
 
 			int64_t user_write_lba;
 			
@@ -357,10 +364,10 @@ int main(){
 			
 			close(fd);
 			if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+				printf("OpenSSD didn't opened correctly\n");
 				perror("open (write) error on file /dev/sdb");
 				exit(-1);
-			}
-			printf("OpenSSD opened correctly\n");
+			} 
 
 			char responseBuffer[nSectors * SECT_SIZE];
 			for(int i = 0; i < nSectors * SECT_SIZE; i++) 
