@@ -60,8 +60,8 @@ void authentication(){
 	uint8_t buffer[64] = {0};
 	uint8_t result[64] = {0};
 	
-	char password[] = "testtest"; // TODO: this is for test - need to pull from passwordfile by userName
-	char userName[] = "shani";
+	char password[20] = {0}; // TODO: this is for test - need to pull from passwordfile by userName
+	char userName[50] = {0};
 
 	uint8_t* dataPart1 = NULL;
 	uint8_t* dataPart2 = NULL;
@@ -78,6 +78,14 @@ void authentication(){
 	int testCnt = 0;
 	uint8_t msg[128] = {0};
 	uint8_t tmpInput[64] = {0};
+
+	printf("\nEnter username: ");
+	scanf("%s",userName);
+	printf("\nEnter password: ");
+	scanf("%s",password);
+	printf("\n");
+
+
 
 	// 1 - write userName, user public key
 	if((fd = open("/dev/sdb", O_RDWR)) < 0) {
@@ -240,6 +248,12 @@ void authentication(){
 	printf("user challenge: %016lx\n", user_Challenge);
 	printf("user challenge ake: %016lx\n", user_ChallengeAck);
 
+	if ( user_Challenge != user_ChallengeAck ){
+		printf("\nAUTHENTICATION FAILED!!!\n");
+	} else {
+		printf("\nAUTHENTICATED!\n");
+	}
+
 	close(fd);
 
 }
@@ -288,6 +302,14 @@ int main(){
 			readCnt = pread(fd, readbuffer, nSectors*SECT_SIZE, user_read_pos);
 			readbuffer[nSectors*SECT_SIZE-1] = 0;
 
+			close(fd);
+			if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+				perror("open (write) error on file /dev/sdb");
+				exit(-1);
+			}
+			printf("OpenSSD opened correctly\n");
+
+
 			char responseBuffer[nSectors * SECT_SIZE];
 			for(int i = 0; i < nSectors * SECT_SIZE; i++) 
 				responseBuffer[i] = 0;
@@ -295,11 +317,11 @@ int main(){
 			readCnt = pread(fd, responseBuffer, nSectors*SECT_SIZE, r_pos);
 			responseBuffer[nSectors*SECT_SIZE-1] = 0;
 
-			if (strcmp(responseBuffer,"AUTHENTICATED")==0){
+			if (strcmp(responseBuffer,"SUCCESS")==0){
 				printf("Data received: \n%s\n", readbuffer);			
 			}
 			else {
-				printf("Data received: \n%s\n", responseBuffer);
+				printf("Response: \n%s\n", responseBuffer);
 			}
 			
 			// TODO: add encryption/decryption for data transfer
@@ -333,6 +355,13 @@ int main(){
 			
 			int writeCnt = pwrite(fd, msg, nSectors*SECT_SIZE, user_write_pos);
 			
+			close(fd);
+			if((fd = open("/dev/sdb", O_RDWR)) < 0) {
+				perror("open (write) error on file /dev/sdb");
+				exit(-1);
+			}
+			printf("OpenSSD opened correctly\n");
+
 			char responseBuffer[nSectors * SECT_SIZE];
 			for(int i = 0; i < nSectors * SECT_SIZE; i++) 
 				responseBuffer[i] = 0;

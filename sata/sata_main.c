@@ -35,20 +35,11 @@ volatile UINT32		g_sata_action_flags;
 unsigned char msgToUser[MAX_MSG_SIZE] = {0};
 int  commandCounter = 0;
 
-/*
-typedef struct _user {
-	char username[MAX_USER_NAME];
-	char password[MAX_PASSWORD];
-	UINT32 readPermissions;
-	UINT32 writePermissions;
-} User;
-*/
+const char username[] = "user";
+char password[] = "12345678";
 
-const char username[] = "shani";
-char password[20] = {0};
-
-UINT32 readPermissions = 0;
-UINT32 writePermissions = 0;
+const UINT32 readPermissions = 17; // read permissions to banks 4 & 0
+const UINT32 writePermissions = 18; // write permissions to banks 1 & 4
 
 ESystemState		 currSysState  = SYS_INITIAL_STATE;
 EAuthenticationState currAuthState = AUTH_INITIAL_STATE; // after an authentication process began - sign in which step in the process 
@@ -115,33 +106,22 @@ void encryptBuffer(uint8_t* result, uint8_t* data, uint32_t length, const uint8_
 	AES128_CBC_encrypt_buffer(result, data, length, key, iv);
 }
 
-/*
-int getUserID(const char* username){
-	int retVal = -1;
-	if (strcmp(username,"gal")==0){
-		retVal = 0;
-	} else if (strcmp(username,"shani")==0) {
-		retVal = 1;
-	}
-	
-	return retVal;
 
-}*/
-
-void badRead(char* msg,int lba){
-	memset(msg,0,sizeof(msg));
+void badRead(int lba){
+	memset(msgToUser,0,sizeof(msgToUser));
 	if(lba == 102){
-		sendData(msg, sizeof(msg));
+		sendData(msgToUser, sizeof(msgToUser));
 	}
 	else{
-		memcpy(msg,"NOT AUTHENTICATED!",sizeof("NOT AUTHENTICATED!"));
-		if(currSysState != SYS_INITIAL_STATE) sendData(msg, sizeof(msg));
+		char tmpString[] = "NOT_AUTHENTICATED";
+		memcpy(msgToUser,tmpString,sizeof(tmpString));
+		if(currSysState != SYS_INITIAL_STATE) sendData(msgToUser, sizeof(msgToUser));
 	}
 }
 
 void authentication(CMD_T cmd){
 	
-	char* password = NULL; // TODO: this is for test - need to pull from passwordfile by userName
+	 // TODO: this is for test - need to pull from passwordfile by userName
 	char* currentUserName = NULL;
 //	static int currentUserId = -1;
 
@@ -165,7 +145,7 @@ void authentication(CMD_T cmd){
 	{
 	case AUTH_INITIAL_STATE: //expect to receive user pablic key
 		if(cmd.cmd_type == READ){ // Not Good
-			badRead(msg,cmd.lba);
+			badRead(cmd.lba);
 		}
 		if(cmd.cmd_type == WRITE && cmd.lba == 102) { //OK: get user key and do actions
 			uart_printf(" OK AUTH_INITIAL_STATE: ");
@@ -197,7 +177,7 @@ void authentication(CMD_T cmd){
 				memcpy(&user_public, result, sizeof(user_public));
 				memset(result, 0, sizeof(result));
 				
-				uart_printf("  g^x = %016llx", user_public);
+//				uart_printf("  g^x = %016llx", user_public);
 				
 				server_random = randomint64();
 				server_public = powmodp(G, server_random);			
@@ -219,7 +199,7 @@ void authentication(CMD_T cmd){
 				currMsgState  = MSG_READY;
 				currAuthState = AUTH_GOT_USER_KEY;
 				
-				uart_printf("  g^y = %016llx", server_public);
+//				uart_printf("  g^y = %016llx", server_public);
 				uart_printf("  symetricKey = %016llx", server_symetricKey);
 			}
 			else {
@@ -252,7 +232,7 @@ void authentication(CMD_T cmd){
 		
 	case AUTH_SERVER_KEY_CHALLANGE_WAS_SENT: //expect to receive server challenge ake and user challenge
 		if(cmd.cmd_type == READ){ // Not Good
-			badRead(msg,cmd.lba);
+			badRead(cmd.lba);
 		}
 		if(cmd.cmd_type == WRITE && cmd.lba == 102) { // OK: get server challenge ake and user challenge
 			uart_printf(" OK AUTH_SERVER_KEY_CHALLANGE_WAS_SENT: ");
@@ -331,20 +311,13 @@ void authentication(CMD_T cmd){
 	}
 }
 
-void initializePermissions(){
-	strcpy(password,"12345678");
-	
-	readPermissions = 65600; // read permissions to banks 4 & 16
-	writePermissions = 18; // write permissions to banks 1 & 4
-}
-
-
 int authorization(int bank,EAuthorizationAction action){
 	int tmpBank = 1 << bank;
-	if (action == READ && (readPermissions & tmpBank) ){
+	uart_printf("tmpBank - %d, rP - %d , wP - %d ",tmpBank,readPermissions,writePermissions);
+	if ((action == AUTH_READ) && (readPermissions & tmpBank) ){
 		return 1;
 	}
-	if (action == WRITE && (writePermissions & tmpBank)){
+	if ((action == AUTH_WRITE) && (writePermissions & tmpBank)){
 		return 1;
 	}
 	
@@ -408,6 +381,8 @@ __inline ATA_FUNCTION_T search_ata_function(UINT32 command_code)
 
 void Main(void)
 {	
+unsigned char msg[1] = {0};
+
 	while (1)
 	{
 		
@@ -435,12 +410,13 @@ void Main(void)
 			commandCounter++;
 	
 			UINT32 bank = get_num_bank(cmd.lba / SECTORS_PER_PAGE);
-			
+						
 			if(currSysState == SYS_AUTHENTICATED){
 				uart_printf("SYS_AUTHENTICATED");
+				uart_printf("bank is - %d",bank);
 				if (cmd.cmd_type == READ && cmd.lba == 96) {
 					if (notAuthorizedFlag){
-						unsigned char msg[] = "NOT AUTHORIZED";
+						unsigned char msg[] = "NOT_AUTHORIZED";
 						sendData(msg,sizeof(msg));
 						notAuthorizedFlag = 0;
 					} else {
@@ -449,20 +425,24 @@ void Main(void)
 					}	
 				} 
 				else if (cmd.cmd_type == READ) {
-//					if (authorization(bank,AUTH_READ)){
+					if (authorization(bank,AUTH_READ)){
 						ftl_read(cmd.lba, cmd.sector_count);
-//					}
-//					else {
-//						notAuthorizedFlag = 1;
-//					}
+					}
+					else {
+						notAuthorizedFlag = 1;
+						memset(msg,0,sizeof(msg));
+						sendData(msg, sizeof(msg));						
+					}
 				}
 				else {
-//					if (authorization(bank,AUTH_READ)){
+					if (authorization(bank,AUTH_WRITE)){
 						ftl_write(cmd.lba, cmd.sector_count);
-//					}
-//					else {
-//						notAuthorizedFlag = 1;
-//					}
+					}
+					else {
+						notAuthorizedFlag = 1;
+						memset(msg,0,sizeof(msg));
+						getData(cmd.lba, msg, BYTES_PER_SECTOR);
+					}
 				}
 			}
 			else {

@@ -87,7 +87,7 @@ void init_jasmine(void)
 
 	#if OPTION_UART_DEBUG
 	uart_init();
-	uart_print("Welcome Shani! to OpenSSD");
+//	uart_print("Welcome Shani! to OpenSSD");
 	#endif
 
 	SETREG(SDRAM_ECC_MON, 0xFFFFFFFF);
@@ -143,5 +143,5 @@ void init_jasmine(void)
     while (1);
     #endif
 
-	uart_printf("INIT FINISHED");
+//	uart_printf("INIT FINISHED");
 }
